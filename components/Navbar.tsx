@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Logo from "@/public/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +22,9 @@ const Navbar = () => {
             </Button>
           </Link>
         </div>
-        <LanguageSwitch />
+        <Suspense>
+          <LanguageSwitch />
+        </Suspense>
       </div>
     </nav>
   );
