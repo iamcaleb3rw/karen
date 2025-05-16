@@ -1,4 +1,12 @@
-import { pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import {
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 //TIMESTAMPS
 const createdAt = timestamp("createdAt").notNull().defaultNow();
@@ -15,37 +23,77 @@ export const complaintStatusEnum = pgEnum("complaint_status", [
 ]);
 
 //COMPLAINTS TABLE
-export const complaintTable = pgTable("complaints", {
+export const complaints = pgTable("complaints", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: text("name").notNull(),
   description: text("description").notNull(),
   departmentId: uuid("departmentId").notNull(),
   status: complaintStatusEnum("status").notNull().default("pending"),
-  categoryId: text("categoryId").notNull(),
+  categoryId: uuid("categoryId")
+    .references(() => categories.id, { onDelete: "cascade" })
+    .notNull(),
   location: text("location").notNull(),
-  userId: text("userId").notNull(),
+  userId: uuid("userId")
+    .references(() => users.userId, {
+      onDelete: "cascade",
+    })
+    .notNull(),
   createdAt,
   updatedAt,
 });
 
 //KARENS TABLE
-export const userTable = pgTable("karens", {
+export const userRole = pgEnum("userRole", ["citizen", "staff"]);
+export const users = pgTable("users", {
   userId: uuid("userId").primaryKey().notNull().defaultRandom(),
-  phoneNumber: text("").notNull(),
-  email: text("email"),
+  phoneNumber: text("phoneNumber").notNull(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  role: userRole("role").default("citizen").notNull(),
+  createdAt,
+  updatedAt,
 });
 
 //COMPLAINT CATEGORY TABLE
-export const categoryTable = pgTable("categories", {
+export const categories = pgTable("categories", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: text("name").notNull().unique(),
   description: text("description"),
-  departmentId: uuid("departmentId").notNull(),
+  departmentId: uuid("departmentId")
+    .references(() => departments.id, { onDelete: "cascade" })
+    .notNull(),
 });
 
 //DEPARTMENT TABLE
-export const departmentTable = pgTable("departments", {
+export const departments = pgTable("departments", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: text("name").notNull().unique(),
   description: text("description"),
 });
+
+//JOINS, RELATIONS
+export const userRelations = relations(users, ({ many }) => ({
+  complaints: many(complaints),
+}));
+
+export const complaintsRelations = relations(complaints, ({ one }) => ({
+  user: one(users, {
+    fields: [complaints.userId],
+    references: [users.userId],
+  }),
+  category: one(categories, {
+    fields: [complaints.categoryId],
+    references: [categories.id],
+  }),
+}));
+
+export const departmentRelations = relations(departments, ({ many }) => ({
+  categories: many(categories),
+}));
+
+export const categoriesRelations = relations(categories, ({ one, many }) => ({
+  department: one(departments, {
+    fields: [categories.departmentId],
+    references: [departments.id],
+  }),
+  complaints: many(complaints),
+}));
