@@ -1,75 +1,78 @@
 "use client";
 
-import * as React from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-
-import { Button } from "@/components/ui/button";
+import { useMemo, useState, useEffect, startTransition } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { Check, ChevronDown, Languages } from "lucide-react";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Languages } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function LanguageSwitch() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [optimisticLocale, setOptimisticLocale] = useState<string>("en");
 
-  // Get current locale from pathname (assuming locale is first segment)
-  const segments = pathname.split("/");
-  const currentLocale = segments[1]; // e.g. "eng" or "kiny"
+  // Sync with actual pathname changes
+  useEffect(() => {
+    const locale = pathname.split("/")[1] || "en";
+    setOptimisticLocale(locale);
+  }, [pathname]);
 
-  // Prepare a function to switch locale
-  const switchLocale = (locale: string) => {
-    // Replace the first segment with the new locale
-    segments[1] = locale;
+  const handleLanguageChange = (newLocale: string) => {
+    // Optimistically update the UI immediately
+    setOptimisticLocale(newLocale);
 
-    // Compose new path
-    const newPathname = segments.join("/");
-
-    // Include search params
-    const search = searchParams.toString();
-    const url = search ? `${newPathname}?${search}` : newPathname;
-
-    // Navigate to new locale URL
-    router.push(url);
+    // Start navigation transition
+    startTransition(() => {
+      const segments = pathname.split("/");
+      segments[1] = newLocale;
+      const searchParams = new URLSearchParams(window.location.search);
+      router.push(`${segments.join("/")}?${searchParams.toString()}`);
+    });
   };
+
+  const languageLabel = optimisticLocale === "rw" ? "Kinyarwanda" : "English";
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        asChild
-        className="bg-transparent shadow-none cursor-pointer border-none hover:bg-muted/30 hover:text-white text-white"
-      >
-        <Button variant="outline">
-          <Languages />
-          {currentLocale === "en" ? "English" : "Kinyarwanda"}
-          <ChevronDown />
+      <DropdownMenuTrigger asChild className="">
+        <Button
+          variant="ghost"
+          className="bg-transparent hover:bg-accent/30 text-white hover:text-white"
+        >
+          <Languages className="mr-2 h-4 w-4" />
+          {languageLabel}
+          <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Select Language</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
+          Select Language
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuCheckboxItem
-          checked={currentLocale === "en"}
-          onCheckedChange={() => switchLocale("en")}
+        <DropdownMenuItem
+          onClick={() => handleLanguageChange("en")}
+          className="cursor-pointer flex items-center justify-between"
         >
-          English(US)
-        </DropdownMenuCheckboxItem>
+          English
+          {optimisticLocale === "en" && <Check />}
+        </DropdownMenuItem>
 
-        <DropdownMenuCheckboxItem
-          checked={currentLocale === "rw"}
-          onCheckedChange={() => switchLocale("rw")}
+        <DropdownMenuItem
+          onClick={() => handleLanguageChange("rw")}
+          className="cursor-pointer flex items-center justify-between"
         >
           Kinyarwanda
-        </DropdownMenuCheckboxItem>
+          {optimisticLocale === "rw" && <Check />}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
