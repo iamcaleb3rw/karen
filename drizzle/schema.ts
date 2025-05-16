@@ -63,6 +63,14 @@ export const categories = pgTable("categories", {
     .notNull(),
 });
 
+export const subcategories = pgTable("subcategories", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: text("name").notNull().unique(),
+  categoryId: uuid("categoryId")
+    .references(() => categories.id, { onDelete: "cascade" })
+    .notNull(),
+});
+
 //DEPARTMENT TABLE
 export const departments = pgTable("departments", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
@@ -96,4 +104,12 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
     references: [departments.id],
   }),
   complaints: many(complaints),
+  subcategories: many(subcategories),
+}));
+
+export const subcategoriesRelations = relations(subcategories, ({ one }) => ({
+  category: one(categories, {
+    fields: [subcategories.categoryId],
+    references: [categories.id],
+  }),
 }));

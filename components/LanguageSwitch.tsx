@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 
 import { Button } from "@/components/ui/button";
@@ -14,15 +15,29 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, Languages } from "lucide-react";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"];
-
 export function LanguageSwitch() {
-  // Instead of your previous states, use a single state for language:
-  const [language, setLanguage] = React.useState<"eng" | "kiny">("eng");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  // Helper to toggle language
-  const toggleLanguage = (lang: "eng" | "kiny") => {
-    setLanguage(lang);
+  // Get current locale from pathname (assuming locale is first segment)
+  const segments = pathname.split("/");
+  const currentLocale = segments[1]; // e.g. "eng" or "kiny"
+
+  // Prepare a function to switch locale
+  const switchLocale = (locale: string) => {
+    // Replace the first segment with the new locale
+    segments[1] = locale;
+
+    // Compose new path
+    const newPathname = segments.join("/");
+
+    // Include search params
+    const search = searchParams.toString();
+    const url = search ? `${newPathname}?${search}` : newPathname;
+
+    // Navigate to new locale URL
+    router.push(url);
   };
 
   return (
@@ -32,9 +47,8 @@ export function LanguageSwitch() {
         className="bg-transparent shadow-none cursor-pointer border-none hover:bg-muted/30 hover:text-white text-white"
       >
         <Button variant="outline">
-          {/* Show current language label on button */}
           <Languages />
-          {language === "eng" ? "English" : "Kinyarwanda"}
+          {currentLocale === "en" ? "English" : "Kinyarwanda"}
           <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
@@ -43,19 +57,18 @@ export function LanguageSwitch() {
         <DropdownMenuLabel>Select Language</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        {/* Radio-like items for language selection */}
         <DropdownMenuCheckboxItem
-          checked={language === "eng"}
-          onCheckedChange={() => toggleLanguage("eng")}
+          checked={currentLocale === "en"}
+          onCheckedChange={() => switchLocale("en")}
         >
-          English (Eng)
+          English(US)
         </DropdownMenuCheckboxItem>
 
         <DropdownMenuCheckboxItem
-          checked={language === "kiny"}
-          onCheckedChange={() => toggleLanguage("kiny")}
+          checked={currentLocale === "rw"}
+          onCheckedChange={() => switchLocale("rw")}
         >
-          Kinyarwanda (Kiny)
+          Kinyarwanda
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
