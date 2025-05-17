@@ -43,12 +43,13 @@ export const complaints = pgTable("complaints", {
 });
 
 //KARENS TABLE
-export const userRole = pgEnum("userRole", ["citizen", "staff"]);
+export const userRole = pgEnum("userRole", ["citizen", "staff", "admin"]);
 export const users = pgTable("users", {
   userId: uuid("userId").primaryKey().notNull().defaultRandom(),
   phoneNumber: text("phoneNumber").notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   role: userRole("role").default("citizen").notNull(),
+  departmentId: uuid("departmentId").references(() => departments.id),
   createdAt,
   updatedAt,
 });
@@ -79,8 +80,12 @@ export const departments = pgTable("departments", {
 });
 
 //JOINS, RELATIONS
-export const userRelations = relations(users, ({ many }) => ({
+export const userRelations = relations(users, ({ many, one }) => ({
   complaints: many(complaints),
+  department: one(departments, {
+    fields: [users.departmentId],
+    references: [departments.id],
+  }),
 }));
 
 export const complaintsRelations = relations(complaints, ({ one }) => ({

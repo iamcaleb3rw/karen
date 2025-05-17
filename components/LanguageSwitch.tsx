@@ -37,14 +37,14 @@ export function LanguageSwitch() {
     });
   };
 
-  const languageLabel = optimisticLocale === "rw" ? "Kinyarwanda" : "English";
+  const languageLabel = optimisticLocale === "rw" ? "Kinya" : "English";
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="">
+      <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="bg-transparent hover:bg-accent/30 text-white hover:text-white"
+          className="bg-transparent hover:bg-accent/50 text-background"
         >
           <Languages className="mr-2 h-4 w-4" />
           {languageLabel}

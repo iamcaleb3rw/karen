@@ -2,6 +2,7 @@ import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import LightLogo from "@/public/lightlogo.svg";
+import Categories from "@/components/Categories";
 
 export default function Home() {
   return (
@@ -20,6 +21,9 @@ export default function Home() {
           />
         </div>
       </header>
+      <main>
+        <Categories />
+      </main>
     </div>
   );
 }
