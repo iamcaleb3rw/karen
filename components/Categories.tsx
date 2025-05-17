@@ -14,6 +14,7 @@ const Categories = async () => {
               {cat.subcategories.map((sub) => (
                 <Link
                   href={`/${sub.name}`}
+                  key={sub.id}
                   className="hover:text-indigo-500 hover:underline text-muted-foreground "
                 >
                   <p className="my-1">{sub.name}</p>
