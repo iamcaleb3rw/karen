@@ -182,7 +182,7 @@ export default function ComplaintForm() {
 
   return (
     <div className="w-full max-w-6xl mx-auto">
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col mt-2 lg:flex-row gap-8">
         <div className="flex-1 bg-white rounded-lg shadow-sm p-6 lg:p-8">
           <div className="mb-8">
             <h1 className="text-2xl font-semibold text-gray-900">
@@ -301,7 +301,7 @@ export default function ComplaintForm() {
           </div>
         </div>
 
-        <div className="w-full lg:w-[350px] bg-gray-50 rounded-lg p-6 lg:p-8 h-fit sticky top-8">
+        <div className="w-full lg:w-[350px] bg-gray-50 rounded-lg p-6 lg:p-8 h-fit sticky top-14">
           <h2 className="text-lg font-medium text-gray-900 mb-4">
             Complaint Process
           </h2>
