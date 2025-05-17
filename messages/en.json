@@ -1,5 +1,15 @@
 {
   "HomePage": {
+    "Navigation": {
+      "auth": {
+        "login": "Log In",
+        "logout": "Logout",
+        "signup": "Create account"
+      },
+      "search": {
+        "text": "Search complaints"
+      }
+    },
     "title": "Welcome",
     "tagline": "File a complaint in an instant",
     "search": "Search for services"

@@ -1,5 +1,15 @@
 {
   "HomePage": {
+    "Navigation": {
+      "auth": {
+        "login": "Injira",
+        "logout": "Sohokamo",
+        "signup": "Iyandikishe"
+      },
+      "search": {
+        "text": "Shakisha dosiye"
+      }
+    },
     "title": "Murakaza neza",
     "tagline": "Menyekanisha ikibazo mu kanya nkako guhumbya",
     "search": "Shakisha ikibazo ushaka kumenyekanisha"
