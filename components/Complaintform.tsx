@@ -21,6 +21,7 @@ import { ComplaintDetailsStep } from "./ComplaintDetail";
 import { PreferencesStep } from "./Preferences";
 import { ReviewStep } from "./Review";
 import { PersonalInfoStep } from "./Personalinfo";
+import { createUser } from "@/actions/createUser";
 
 const formSchema = z.object({
   firstName: z
@@ -49,7 +50,7 @@ type Step = {
   icon: React.ReactNode;
 };
 
-export default function ComplaintForm() {
+export default function ComplaintForm({ title }: { title: string }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [photo, setPhoto] = useState<string | null>(null);
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
@@ -137,6 +138,7 @@ export default function ComplaintForm() {
 
   const sendOTP = () => {
     const phoneNumber = getValues("phoneNumber");
+
     if (phoneNumber.length < 10) {
       toast.error("Please enter a valid phone number");
       return;
@@ -155,22 +157,25 @@ export default function ComplaintForm() {
     }, 1500);
   };
 
-  const verifyOTP = () => {
+  const verifyOTPandCreateUser = async () => {
     if (otpCode.length < 6) {
       toast.error("Please enter a valid verification code");
       return;
     }
+    try {
+      const phoneNumber = getValues("phoneNumber");
+      const firstName = getValues("firstName");
+      const lastName = getValues("lastName");
 
-    setIsVerifying(true);
-    setTimeout(() => {
-      if (otpCode.length === 6) {
-        setIsPhoneVerified(true);
-        toast.success("Phone number verified");
-      } else {
-        toast.error("Invalid verification code");
-      }
-      setIsVerifying(false);
-    }, 1500);
+      const user = await createUser(phoneNumber, firstName, lastName);
+      console.log("USER", user);
+      setIsPhoneVerified(true);
+      toast.success("Phone number verified successfully");
+      setOtpCode("");
+    } catch (error) {
+      console.error("Verification error:", error);
+      toast.error("Failed to verify phone number. Please try again.");
+    }
   };
 
   const handlePhotoChange = async (file: File | null) => {
@@ -205,11 +210,9 @@ export default function ComplaintForm() {
       <div className="flex flex-col mt-2 lg:flex-row gap-8">
         <div className="flex-1 bg-white rounded-lg shadow-sm p-6 lg:p-8">
           <div className="mb-8">
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Submit a Complaint
-            </h1>
+            <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
             <p className="text-gray-500 mt-2">
-              Please complete all steps to submit your complaint
+              Please complete all steps to submit your {title} complaint
             </p>
           </div>
 
@@ -277,7 +280,7 @@ export default function ComplaintForm() {
                   otpCode={otpCode}
                   setOtpCode={setOtpCode}
                   sendOTP={sendOTP}
-                  verifyOTP={verifyOTP}
+                  verifyOTP={verifyOTPandCreateUser}
                 />
               )}
 

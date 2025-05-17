@@ -47,8 +47,10 @@ export const complaints = pgTable("complaints", {
 export const userRole = pgEnum("userRole", ["citizen", "staff", "admin"]);
 export const users = pgTable("users", {
   userId: uuid("userId").primaryKey().notNull().defaultRandom(),
+  firstName: varchar("firstName", { length: 50 }),
+  lastName: varchar("lastName", { length: 50 }),
   phoneNumber: text("phoneNumber").notNull(),
-  email: varchar("email", { length: 255 }).notNull().unique(),
+  email: varchar("email", { length: 255 }).unique(),
   role: userRole("role").default("citizen").notNull(),
   departmentId: uuid("departmentId").references(() => departments.id),
   createdAt,

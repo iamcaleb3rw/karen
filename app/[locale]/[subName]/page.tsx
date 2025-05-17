@@ -33,7 +33,7 @@ const Complaint = async ({
         </div>
         <div>TOS</div>
       </div>
-      <ComplaintForm />
+      <ComplaintForm title={title} />
     </div>
   );
 };
