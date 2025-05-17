@@ -27,6 +27,7 @@ export const complaints = pgTable("complaints", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: text("name").notNull(),
   description: text("description").notNull(),
+  imageUrl: text("imageUrl"),
   departmentId: uuid("departmentId").notNull(),
   status: complaintStatusEnum("status").notNull().default("pending"),
   categoryId: uuid("categoryId")

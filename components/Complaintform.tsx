@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form"; // Keep the import
 import { toast } from "sonner";
+import axios from "axios";
 import {
   CheckCircle2,
   ArrowRight,
@@ -54,6 +55,7 @@ export default function ComplaintForm() {
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [otpCode, setOtpCode] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const steps: Step[] = [
     {
@@ -123,6 +125,7 @@ export default function ComplaintForm() {
 
   function onSubmit(values: FormValues) {
     console.log({ ...values, photo });
+
     toast.success("Complaint submitted", {
       description: "We've received your complaint and will review it shortly.",
     });
@@ -170,11 +173,28 @@ export default function ComplaintForm() {
     }, 1500);
   };
 
-  const handlePhotoChange = (file: File | null) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => setPhoto(e.target?.result as string);
-      reader.readAsDataURL(file);
+  const handlePhotoChange = async (file: File | null) => {
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await axios.post("/api/files", formData);
+      if (response.status === 200) {
+        console.log(response.data);
+        setPhoto(response.data);
+      } else {
+        toast.error("Image Upload Failed");
+      }
+
+      toast.success("File uploaded to IPFS via Pinata");
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Failed to upload file");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -267,6 +287,7 @@ export default function ComplaintForm() {
                   photo={photo}
                   handlePhotoChange={handlePhotoChange}
                   removePhoto={removePhoto}
+                  isUploading={isUploading}
                 />
               )}
 
