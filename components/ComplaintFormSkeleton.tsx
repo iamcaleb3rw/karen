@@ -7,7 +7,7 @@ export function ComplaintFormSkeleton() {
     <div className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left Side - Main Form */}
-        <div className="flex-1 bg-muted-foreground rounded-lg shadow-sm p-6 lg:p-8">
+        <div className="flex-1 bg-white rounded-lg shadow-sm p-6 lg:p-8">
           <div className="mb-8">
             <Skeleton className="h-8 w-[250px] mb-2" />
             <Skeleton className="h-4 w-[300px]" />
@@ -91,7 +91,7 @@ export function ComplaintFormSkeleton() {
         </div>
 
         {/* Right Side - Process Info */}
-        <div className="w-full lg:w-[350px] bg-muted-foreground rounded-lg p-6 lg:p-8 h-fit sticky top-8">
+        <div className="w-full lg:w-[350px] bg-muted rounded-lg p-6 lg:p-8 h-fit sticky top-8">
           <Skeleton className="h-6 w-[200px] mb-4" />
           <div className="space-y-4">
             <div className="space-y-3">
