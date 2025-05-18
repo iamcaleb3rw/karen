@@ -132,3 +132,33 @@
 .hyper-pulse {
   animation: hyper-pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+.circle {
+  stroke-dasharray: 1194;
+  stroke-dashoffset: 1194;
+  animation: dc 1.5s ease-in-out;
+  animation-fill-mode: forwards;
+}
+.tick {
+  stroke-dasharray: 350;
+  stroke-dashoffset: 350;
+  animation: dt 1.3s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: 0.95s;
+}
+@keyframes dc {
+  from {
+    stroke-dashoffset: 1194;
+  }
+  to {
+    stroke-dashoffset: 2388;
+  }
+}
+@keyframes dt {
+  from {
+    stroke-dashoffset: 350;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

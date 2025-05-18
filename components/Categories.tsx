@@ -1,4 +1,5 @@
 import { getAllCategoriesWithSubcategories } from "@/actions/getCategories";
+import { subcategories } from "@/drizzle/schema";
 import Link from "next/link";
 import React from "react";
 
@@ -13,7 +14,14 @@ const Categories = async () => {
             <div>
               {cat.subcategories.map((sub) => (
                 <Link
-                  href={`/${sub.name}`}
+                  href={{
+                    pathname: `/${sub.name}`,
+                    query: {
+                      dId: cat.departmentId.toString(),
+                      cId: sub.categoryId.toString(),
+                      sId: sub.id.toString(),
+                    },
+                  }}
                   key={sub.id}
                   className="hover:text-indigo-500 hover:underline text-muted-foreground "
                 >

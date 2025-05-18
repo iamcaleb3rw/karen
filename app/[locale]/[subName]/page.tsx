@@ -8,10 +8,18 @@ import { Home } from "lucide-react";
 
 const Complaint = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; subName: string }>;
+  searchParams: Promise<{
+    dId: string;
+    cId: string;
+    sId: string;
+  }>;
 }) => {
   const { subName } = await params;
+  const { dId, cId, sId } = await searchParams;
+  console.log("SEARCHPARAMS", dId, cId, sId);
   const title = decodeURIComponent(subName);
   return (
     <div>
@@ -33,7 +41,7 @@ const Complaint = async ({
         </div>
         <div>TOS</div>
       </div>
-      <ComplaintForm title={title} />
+      <ComplaintForm title={title} departmentId={dId} categoryId={cId} />
     </div>
   );
 };

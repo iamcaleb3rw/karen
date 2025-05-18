@@ -22,6 +22,8 @@ import { PreferencesStep } from "./Preferences";
 import { ReviewStep } from "./Review";
 import { PersonalInfoStep } from "./Personalinfo";
 import { createUser } from "@/actions/createUser";
+import { createComplaint } from "@/actions/createComplaint";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   firstName: z
@@ -49,14 +51,25 @@ type Step = {
   title: string;
   icon: React.ReactNode;
 };
-
-export default function ComplaintForm({ title }: { title: string }) {
+interface ComplaintFormProps {
+  title: string;
+  departmentId: string;
+  categoryId: string;
+}
+export default function ComplaintForm({
+  title,
+  departmentId,
+  categoryId,
+}: ComplaintFormProps) {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
-  const [photo, setPhoto] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<string | null | any>(null);
+  const [docId, setDocId] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [uid, setUid] = useState("");
 
   const steps: Step[] = [
     {
@@ -124,12 +137,27 @@ export default function ComplaintForm({ title }: { title: string }) {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  function onSubmit(values: FormValues) {
-    console.log({ ...values, photo });
+  async function onSubmit(values: FormValues) {
+    try {
+      const response = await createComplaint(
+        title,
+        values.description,
+        photo,
+        departmentId,
+        categoryId,
+        values.location,
+        uid
+      );
+      setDocId(response.id);
+      router.push(`/success/${response.id}`);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
 
     toast.success("Complaint submitted", {
       description: "We've received your complaint and will review it shortly.",
     });
+
     form.reset();
     setPhoto(null);
     setCurrentStep(1);
@@ -169,6 +197,7 @@ export default function ComplaintForm({ title }: { title: string }) {
 
       const user = await createUser(phoneNumber, firstName, lastName);
       console.log("USER", user);
+      setUid(user.id);
       setIsPhoneVerified(true);
       toast.success("Phone number verified successfully");
       setOtpCode("");
