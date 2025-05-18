@@ -1,8 +1,8 @@
-// components/SuccessAnimation.tsx
+"use client";
 import React from "react";
 import "../app/[locale]/globals.css";
 
-const SuccessAnimation: React.FC = () => {
+const TickAnimation: React.FC = () => {
   const originalSize = 400;
   const newSize = 100;
   const scaleFactor = newSize / originalSize;
@@ -70,4 +70,4 @@ const SuccessAnimation: React.FC = () => {
   );
 };
 
-export default SuccessAnimation;
+export default TickAnimation;

@@ -1,10 +1,9 @@
 import React from "react";
 
-import LottieAnimation from "@/components/LottieAnimation";
-
 import CopyIdButton from "@/components/CopyIdButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import TickAnimation from "@/components/LottieAnimation";
 
 const DocSuccessPage = async ({
   params,
@@ -15,7 +14,7 @@ const DocSuccessPage = async ({
 
   return (
     <div className="flex items-center flex-col text-center justify-center min-h-screen">
-      <LottieAnimation />{" "}
+      <TickAnimation />
       {/* Assuming LottieAnimation is also a Client Component if it uses browser APIs */}
       <p className="text-xl font-bold">
         You complaint was received by the governing body.
