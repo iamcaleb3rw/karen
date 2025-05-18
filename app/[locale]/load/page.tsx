@@ -1,8 +1,9 @@
 import { ComplaintFormSkeleton } from "@/components/ComplaintFormSkeleton";
+import { DocSuccessSkeleton } from "@/components/SuccessLoading";
 import React from "react";
 
 const Load = () => {
-  return <ComplaintFormSkeleton />;
+  return <DocSuccessSkeleton />;
 };
 
 export default Load;
