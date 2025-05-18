@@ -148,7 +148,6 @@ export default function ComplaintForm({
         values.location,
         uid
       );
-      setDocId(response.id);
       router.push(`/success/${response.id}`);
     } catch (error) {
       toast.error(`${error}`);
