@@ -148,14 +148,14 @@ export default function ComplaintForm({
         values.location,
         uid
       );
+      toast.success("Complaint submitted", {
+        description:
+          "We've received your complaint and will review it shortly.",
+      });
       router.push(`/success/${response.id}`);
     } catch (error) {
       toast.error(`${error}`);
     }
-
-    toast.success("Complaint submitted", {
-      description: "We've received your complaint and will review it shortly.",
-    });
 
     form.reset();
     setPhoto(null);
