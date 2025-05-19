@@ -4,75 +4,75 @@ import { categories } from "./drizzle/schema";
 const categoryData = [
   {
     name: "Public Infrastructure",
-    departmentId: "fdcb989d-d6f6-4907-bf5e-72e6ca32756e", // Ministry of Infrastructure
+    departmentId: "68040b2e-54c9-4d03-9682-d29ce8fc18a4", // Ministry of Infrastructure (MININFRA)
   },
   {
     name: "Sanitation & Waste Management",
-    departmentId: "910828c5-c5d4-4390-9d4a-9bafb1eb2813", // Rwanda Utilities Regulatory Authority
+    departmentId: "c35b1113-20d2-45d9-857c-4df0fb86dadc", // Rwanda Utilities Regulatory Authority (RURA)
   },
   {
     name: "Water Supply & Drainage",
-    departmentId: "71921e7c-b6fc-4878-9fe0-9ea7fc609969", // Water and Sanitation Commission
+    departmentId: "45ea5243-fbce-445e-9064-326bc9bc8b61", // Water and Sanitation Corporation (WASAC)
   },
   {
     name: "Electricity & Power Supply",
-    departmentId: "3a4e33cb-66b6-43b7-81a8-73cb53f8a727", // Rwanda Energy Group
+    departmentId: "d65f3979-b8d0-427f-a777-af0c18308340", // Rwanda Energy Group (REG)
   },
   {
     name: "Law & Order",
-    departmentId: "f708926d-464f-44ae-8594-96c279b03c8f", // Rwanda National Police
+    departmentId: "410c2333-1a18-4de6-b193-b031f10b1748", // Rwanda National Police (RNP)
   },
   {
     name: "Health Services",
-    departmentId: "034d34b1-6250-42ab-948d-5b73808d4387", // Ministry of Health
+    departmentId: "1c11fd09-a630-4030-88c2-fae13785640a", // Ministry of Health (MINISANTE)
   },
   {
     name: "Environmental Issues",
-    departmentId: "30b9db34-859e-485e-ac06-c409db6dafcb", // Rwanda Environment Management
+    departmentId: "a557594e-cdad-4fa4-ae24-ccaefaff81c8", // Rwanda Environment Management Authority (REMA)
   },
   {
     name: "Housing & Urban Development",
-    departmentId: "065ecca1-e52d-406c-a5bc-489772aff242", // Rwanda Housing Authority
+    departmentId: "d81eef23-bda6-4f81-a8ef-c6a294a75c87", // Rwanda Housing Authority (RHA)
   },
   {
     name: "Education Services",
-    departmentId: "56014866-6a6b-4087-b8ba-73dcf6dc3b89", // Ministry of Education
+    departmentId: "0ed6abca-d8ee-41d7-8b6a-1e275f3c47f7", // Ministry of Education (MINEDUC)
   },
   {
     name: "Transportation",
-    departmentId: "da105c68-c85c-43a4-a10b-752a13f110e4", // Rwanda Transport Development
+    departmentId: "03217289-de4d-47da-8fd1-202800e55f7c", // Rwanda Transport Development Agency (RTDA)
   },
   {
     name: "Corruption & Governance",
-    departmentId: "b7360879-acf4-40b1-8c1b-dad0c72d5dcc", // Office of the Ombudsman
+    departmentId: "3c6eb994-605b-4175-854e-86a23edb4fe7", // Office of the Ombudsman
   },
   {
     name: "Civic Amenities",
-    departmentId: "7506ba95-716c-47b1-aa5e-44996d5f2184", // Ministry of Local Government
+    departmentId: "266006f4-8d68-4106-8900-3f2db5ac4e53", // Ministry of Local Government (MINALOC)
   },
   {
     name: "Taxes & Utility Billing",
-    departmentId: "00b57806-f92d-4054-861a-bba48a0c8ca7", // Rwanda Revenue Authority
+    departmentId: "2a7bdc07-dcf7-4efe-b9b0-e3e99c4910c5", // Rwanda Revenue Authority (RRA)
   },
   {
     name: "Employment & Labor",
-    departmentId: "87cf307b-60a2-445d-a5b8-8a33269b4a03", // Ministry of Public Service
+    departmentId: "9ba74aac-3767-4afc-b37b-d7e677dc766f", // Ministry of Public Service and Labor (MIFOTRA)
   },
   {
     name: "Digital Services & E-Governance",
-    departmentId: "959bd22a-9019-4df5-8c81-17f82e187857", // Ministry of ICT and Innovation
+    departmentId: "f6a52bb4-fc7a-4d34-89ca-3a8494686ff7", // Ministry of ICT and Innovation (MINICT)
   },
   {
     name: "Licensing & Permits",
-    departmentId: "d108a2e2-730d-4d3d-b5d8-6cead5aa4abe", // Rwanda Development Board
+    departmentId: "545a1dd8-efee-4671-bca9-4e3216baee55", // Rwanda Development Board (RDB)
   },
   {
     name: "Consumer Rights",
-    departmentId: "ec98af57-6960-4891-9615-273c2607c1fb", // Rwanda Consumer Protection
+    departmentId: "d61bb99a-7b50-4620-a1ea-0c1b973ea00c", // Rwanda Consumer Protection Authority
   },
   {
     name: "Welfare & Social Services",
-    departmentId: "8078fdf9-dc75-47ce-802a-5e2f56bf062b", // National Council of People
+    departmentId: "34dbc043-af39-4c4d-aab8-d9e400ee9c6f", // National Council of Persons with Disabilities (NCPD)
   },
 ];
 

@@ -80,7 +80,7 @@ export function ComplaintDetailsStep({
         </label>
         <div className="flex flex-col items-center justify-center border border-gray-200 rounded-md p-4 transition-all hover:border-gray-300">
           {photo ? (
-            <Image src={photo} alt="Proof Image" width={200} height={200} />
+            <img src={photo} alt="Proof Image" width={200} height={200} />
           ) : (
             <div className="flex flex-col items-center justify-center text-center py-4">
               <Upload className="h-8 w-8 text-gray-400 mb-2" />
