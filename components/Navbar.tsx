@@ -17,7 +17,7 @@ const Navbar = () => {
         <p className="text-lg font-semibold">KarenCMS</p>
       </div>
       <div className="flex items-center gap-6">
-        <div className="flex gap-8 text-sm">
+        {/* <div className="flex gap-8 text-sm">
           <Link href={"/login"} className="flex items-center gap-1">
             <LogIn />
             {t("Navigation.auth.login")}
@@ -26,7 +26,7 @@ const Navbar = () => {
             <UserPlus />
             {t("Navigation.auth.signup")}
           </Link>
-        </div>
+        </div> */}
         <div>
           <Link href="/searchdoc">
             <Button className="bg-muted/30 text-white hover:bg-muted/40 cursor-pointer">
