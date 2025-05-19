@@ -13,5 +13,222 @@
     "title": "Welcome",
     "tagline": "File a complaint in an instant",
     "search": "Search for services"
+  },
+  "Categories": {
+    "public-infrastructure": {
+      "name": "Public Infrastructure"
+    },
+    "sanitation-waste-management": {
+      "name": "Sanitation & Waste Management"
+    },
+    "water-supply-drainage": {
+      "name": "Water Supply & Drainage"
+    },
+    "electricity-power-supply": {
+      "name": "Electricity & Power Supply"
+    },
+    "law-order": {
+      "name": "Law & Order"
+    },
+    "health-services": {
+      "name": "Health Services"
+    },
+    "environmental-issues": {
+      "name": "Environmental Issues"
+    },
+    "transportation": {
+      "name": "Transportation"
+    },
+    "civic-amenities": {
+      "name": "Civic Amenities"
+    },
+    "housing-urban-development": {
+      "name": "Housing & Urban Development"
+    },
+    "corruption-governance": {
+      "name": "Corruption & Governance"
+    },
+    "taxes-utility-billing": {
+      "name": "Taxes & Utility Billing"
+    },
+    "employment-labor": {
+      "name": "Employment & Labor"
+    },
+    "licensing-permits": {
+      "name": "Licensing & Permits"
+    },
+    "welfare-social-services": {
+      "name": "Welfare & Social Services"
+    },
+    "digital-services-e-governance": {
+      "name": "Digital Services & E-Governance"
+    },
+    "education-services": {
+      "name": "Education services"
+    }
+  },
+  "Subcategories": {
+    "road-construction": {
+      "name": "Road Construction"
+    },
+    "bridge-maintenance": {
+      "name": "Bridge Maintenance"
+    },
+    "street-lighting": {
+      "name": "Street Lighting"
+    },
+    "public-building-projects": {
+      "name": "Public Building Projects"
+    },
+    "solid-waste-collection": {
+      "name": "Solid Waste Collection"
+    },
+    "sewage-management": {
+      "name": "Sewage Management"
+    },
+    "waste-disposal-sites": {
+      "name": "Waste Disposal Sites"
+    },
+    "public-cleanliness": {
+      "name": "Public Cleanliness"
+    },
+    "water-cuts": {
+      "name": "Water Cuts"
+    },
+    "broken-pipes": {
+      "name": "Broken Pipes"
+    },
+    "drainage-blockages": {
+      "name": "Drainage Blockages"
+    },
+    "water-quality-issues": {
+      "name": "Water Quality Issues"
+    },
+    "power-outages": {
+      "name": "Power Outages"
+    },
+    "meter-complaints": {
+      "name": "Meter Complaints"
+    },
+    "billing-errors": {
+      "name": "Billing Errors"
+    },
+    "transformer-issues": {
+      "name": "Transformer Issues"
+    },
+    "theft-burglary": {
+      "name": "Theft & Burglary"
+    },
+    "domestic-violence": {
+      "name": "Domestic Violence"
+    },
+    "traffic-violations": {
+      "name": "Traffic Violations"
+    },
+    "community-safety": {
+      "name": "Community Safety"
+    },
+    "hospital-facilities": {
+      "name": "Hospital Facilities"
+    },
+    "health-worker-conduct": {
+      "name": "Health Worker Conduct"
+    },
+    "medicine-shortages": {
+      "name": "Medicine Shortages"
+    },
+    "ambulance-services": {
+      "name": "Ambulance Services"
+    },
+    "illegal-dumping": {
+      "name": "Illegal Dumping"
+    },
+    "air-pollution": {
+      "name": "Air Pollution"
+    },
+    "noise-pollution": {
+      "name": "Noise Pollution"
+    },
+    "deforestation": {
+      "name": "Deforestation"
+    },
+    "road-maintenance": {
+      "name": "Road Maintenance"
+    },
+    "public-transport-issues": {
+      "name": "Public Transport Issues"
+    },
+    "bus-stop-facilities": {
+      "name": "Bus Stop Facilities"
+    },
+    "traffic-congestion": {
+      "name": "Traffic Congestion"
+    },
+    "market-cleanliness": {
+      "name": "Market Cleanliness"
+    },
+    "public-parks": {
+      "name": "Public Parks"
+    },
+    "street-naming-issues": {
+      "name": "Street Naming Issues"
+    },
+    "local-office-response": {
+      "name": "Local Office Response"
+    },
+    "housing-permits": {
+      "name": "Housing Permits"
+    },
+    "land-use-issues": {
+      "name": "Land Use Issues"
+    },
+    "slum-upgrading": {
+      "name": "Slum Upgrading"
+    },
+    "building-code-violations": {
+      "name": "Building Code Violations"
+    },
+    "bribery-cases": {
+      "name": "Bribery Cases"
+    },
+    "favoritism-in-services": {
+      "name": "Favoritism in Services"
+    },
+    "delayed-services": {
+      "name": "Delayed Services"
+    },
+    "unresponsive-officials": {
+      "name": "Unresponsive Officials"
+    },
+    "tax-overcharges": {
+      "name": "Tax Overcharges"
+    },
+    "tax-refund-delays": {
+      "name": "Tax Refund Delays"
+    },
+    "billing-disputes": {
+      "name": "Billing Disputes"
+    },
+    "customs-complaints": {
+      "name": "Customs Complaints"
+    },
+    "consumer-rights": {
+      "name": "Consumer Rights"
+    },
+    "ibikorwa-byumujyi": {
+      "name": "City Services"
+    },
+    "school-infrastructure": {
+      "name": "School Infrastructure"
+    },
+    "teacher-conduct": {
+      "name": "Teacher Conduct"
+    },
+    "learning-materials": {
+      "name": "Learning Materials"
+    },
+    "school-fees-issues": {
+      "name": "School Fees Issues"
+    }
   }
 }

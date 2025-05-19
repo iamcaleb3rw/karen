@@ -4,7 +4,13 @@ import Image from "next/image";
 import LightLogo from "@/public/lightlogo.svg";
 import Categories from "@/components/Categories";
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  console.log("FROM PAGE LOCALE", locale);
   return (
     <div>
       <header className="min-h-[50vh] border-b bg-indigo-500">
@@ -22,7 +28,7 @@ export default function Home() {
         </div>
       </header>
       <main>
-        <Categories />
+        <Categories locale={locale} />
       </main>
     </div>
   );

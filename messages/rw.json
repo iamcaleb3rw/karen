@@ -3,15 +3,233 @@
     "Navigation": {
       "auth": {
         "login": "Injira",
-        "logout": "Sohokamo",
-        "signup": "Iyandikishe"
+        "logout": "Sohoka",
+        "signup": "Kora konti"
       },
       "search": {
-        "text": "Shakisha dosiye"
+        "text": "Shakisha ibibazo"
       }
     },
     "title": "Murakaza neza",
-    "tagline": "Menyekanisha ikibazo mu kanya nkako guhumbya",
-    "search": "Shakisha ikibazo ushaka kumenyekanisha"
+    "tagline": "Tanga ikibazo mu kanya",
+    "search": "Shakisha serivisi"
+  },
+  "Categories": {
+    "public-infrastructure": {
+      "name": "Ibikorwa remezo"
+    },
+    "sanitation-waste-management": {
+      "name": "Ibijyanye n'isuku"
+    },
+    "water-supply-drainage": {
+      "name": "Ibijyanye n'amazi"
+    },
+    "electricity-power-supply": {
+      "name": "Amashanyarazi"
+    },
+    "law-order": {
+      "name": "Ibijynaye n'umutekano"
+    },
+    "health-services": {
+      "name": "Serivisi z'Ubuzima"
+    },
+    "environmental-issues": {
+      "name": "Ibijyanye n'ibidukikije"
+    },
+    "transportation": {
+      "name": "Ubwikorezi"
+    },
+    "civic-amenities": {
+      "name": "Inyubako rusange"
+    },
+    "housing-urban-development": {
+      "name": "Imyubakire"
+    },
+    "corruption-governance": {
+      "name": "Ruswa n'imiyoborere"
+    },
+    "taxes-utility-billing": {
+      "name": "Imisoro n'amahoro"
+    },
+    "employment-labor": {
+      "name": "Ibijyanye n'abakozi"
+    },
+    "welfare-social-services": {
+      "name": "Serivisi z'abaturage"
+    },
+    "digital-services-e-governance": {
+      "name": "Serivisi zitangirwa kuri murandasi"
+    },
+    "consumer-rights": {
+      "name": "Ibijyanye n'umuguzi"
+    },
+    "licensing-permits": {
+      "name": "Impushya"
+    },
+    "education-services": {
+      "name": "Serivisi z'uburezi"
+    }
+  },
+  "Subcategories": {
+    "road-construction": {
+      "name": "Iyubakwa ry'umuhanda"
+    },
+    "bridge-maintenance": {
+      "name": "Isanwa ry'ikiraro"
+    },
+    "street-lighting": {
+      "name": "Amatara yo kumuhanda"
+    },
+    "public-building-projects": {
+      "name": "Iyubakwa ry'inzu rusange"
+    },
+    "solid-waste-collection": {
+      "name": "Ikusanywa ry'imynda"
+    },
+    "sewage-management": {
+      "name": "Ibijyanye n'umwanda w'amazi"
+    },
+    "waste-disposal-sites": {
+      "name": "Ibijyanye n'ibimoteri"
+    },
+    "public-cleanliness": {
+      "name": "Isuku rusange"
+    },
+    "water-cuts": {
+      "name": "Ibura ry'amazi"
+    },
+    "broken-pipes": {
+      "name": "Amatiyo yangiritse"
+    },
+    "drainage-blockages": {
+      "name": "Ifunganywa ry'amatiyo atwara amazi"
+    },
+    "water-quality-issues": {
+      "name": "Ikibazo cy'amazi mabi"
+    },
+    "power-outages": {
+      "name": "Ibura ry'amashanyarazi"
+    },
+    "meter-complaints": {
+      "name": "Amakosa ya Facture"
+    },
+    "billing-errors": {
+      "name": "Amakosa ya Facture"
+    },
+    "transformer-issues": {
+      "name": "Ibibazo bya Transformateur"
+    },
+    "theft-burglary": {
+      "name": "Ikibazo cy'ubujura"
+    },
+    "domestic-violence": {
+      "name": "Ihohoterwa mu ngo"
+    },
+    "traffic-violations": {
+      "name": "Ibijynaye n'amatageko y'umuhanda"
+    },
+    "community-safety": {
+      "name": "Umutekano rusange"
+    },
+    "hospital-facilities": {
+      "name": "Iboneka ry'ibitaro"
+    },
+    "health-worker-conduct": {
+      "name": "Imyitwarire idakwiye y'abakozi b'ubuzima"
+    },
+    "medicine-shortages": {
+      "name": "Ibura ry'imiti"
+    },
+    "ambulance-services": {
+      "name": "Ambulansi"
+    },
+    "illegal-dumping": {
+      "name": "Ahajugunye imyanda bitemewe"
+    },
+    "air-pollution": {
+      "name": "Iyangizwa ryikirere"
+    },
+    "noise-pollution": {
+      "name": "Urusaku rwinshi"
+    },
+    "deforestation": {
+      "name": "Itemwa ry'ibiti"
+    },
+    "road-maintenance": {
+      "name": "Isanwa ry'umuhanda"
+    },
+    "public-transport-issues": {
+      "name": "Ikibazo cya bisi rusange"
+    },
+    "bus-stop-facilities": {
+      "name": "Ikibazo cy'aho bisi zihagarara"
+    },
+    "traffic-congestion": {
+      "name": "Ikibazo cya Ambuteyaje"
+    },
+    "market-cleanliness": {
+      "name": "Ikibazo cy'isuku mu isoko"
+    },
+    "public-parks": {
+      "name": "Pariki rusange"
+    },
+    "street-naming-issues": {
+      "name": "Street Naming Issues"
+    },
+    "local-office-response": {
+      "name": "Local Office Response"
+    },
+    "housing-permits": {
+      "name": "Impushya zo kubaka"
+    },
+    "land-use-issues": {
+      "name": "Ibibazo by'ubutaka"
+    },
+    "slum-upgrading": {
+      "name": "Ibibazo by'ibimoteri"
+    },
+    "building-code-violations": {
+      "name": "Iyicwa ry'imyubakire"
+    },
+    "bribery-cases": {
+      "name": "Ruswa"
+    },
+    "favoritism-in-services": {
+      "name": "Ikimenyane muri serivisi za leta"
+    },
+    "delayed-services": {
+      "name": "Gutinda kwa servisi"
+    },
+    "unresponsive-officials": {
+      "name": "Kudasubizwa n'abakozi babishinzwe"
+    },
+    "tax-overcharges": {
+      "name": "Imisoro y'umurengera"
+    },
+    "tax-refund-delays": {
+      "name": "Isubizwa ry'umusoro"
+    },
+    "billing-disputes": {
+      "name": "Kutumvikana k'umusoro"
+    },
+    "customs-complaints": {
+      "name": "Ibibazo bijyanye na gasutamo"
+    },
+
+    "ibikorwa-byumujyi": {
+      "name": "City Services"
+    },
+    "school-infrastructure": {
+      "name": "Ibikoresho by'ishuri"
+    },
+    "teacher-conduct": {
+      "name": "Imyitwarire idakwiye y'umwarimu"
+    },
+    "learning-materials": {
+      "name": "Ikibazo k'ibitabo n'ireme ry'amasomo"
+    },
+    "school-fees-issues": {
+      "name": "Amafaranga y'ishuri"
+    }
   }
 }

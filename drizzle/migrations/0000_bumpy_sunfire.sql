@@ -4,8 +4,10 @@ CREATE TABLE "categories" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"description" text,
+	"slug" varchar NOT NULL,
 	"departmentId" uuid NOT NULL,
-	CONSTRAINT "categories_name_unique" UNIQUE("name")
+	CONSTRAINT "categories_name_unique" UNIQUE("name"),
+	CONSTRAINT "categories_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
 CREATE TABLE "complaints" (
@@ -32,8 +34,10 @@ CREATE TABLE "departments" (
 CREATE TABLE "subcategories" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
+	"slug" varchar NOT NULL,
 	"categoryId" uuid NOT NULL,
-	CONSTRAINT "subcategories_name_unique" UNIQUE("name")
+	CONSTRAINT "subcategories_name_unique" UNIQUE("name"),
+	CONSTRAINT "subcategories_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
 CREATE TABLE "users" (

@@ -62,6 +62,7 @@ export const categories = pgTable("categories", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: text("name").notNull().unique(),
   description: text("description"),
+  slug: varchar("slug").unique().notNull(),
   departmentId: uuid("departmentId")
     .references(() => departments.id, { onDelete: "cascade" })
     .notNull(),
@@ -70,6 +71,7 @@ export const categories = pgTable("categories", {
 export const subcategories = pgTable("subcategories", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: text("name").notNull().unique(),
+  slug: varchar("slug").unique().notNull(),
   categoryId: uuid("categoryId")
     .references(() => categories.id, { onDelete: "cascade" })
     .notNull(),

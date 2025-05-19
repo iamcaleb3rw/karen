@@ -3,8 +3,9 @@ import { subcategories } from "@/drizzle/schema";
 import Link from "next/link";
 import React from "react";
 
-const Categories = async () => {
-  const categories = await getAllCategoriesWithSubcategories();
+const Categories = async ({ locale }: { locale: string }) => {
+  console.log("LOCALE FROM CATEGORIES", locale);
+  const categories = await getAllCategoriesWithSubcategories(locale);
   return (
     <div className="flex bg-muted items-center justify-center gap-20 flex-col py-10">
       <div className="grid grid-cols-2 gap-10">
