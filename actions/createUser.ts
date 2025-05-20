@@ -3,19 +3,21 @@ import { db } from "@/drizzle/db";
 import { users } from "@/drizzle/schema";
 
 export async function createUser(
-  phoneNumber: string,
+  email: string,
   firstName: string,
-  lastName: string
+  lastName: string,
+  clerkId: string | any
 ) {
   try {
     console.log("Received DATA", {
-      phoneNumber,
+      email,
       firstName,
       lastName,
+      clerkId,
     });
 
     const existingUser = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.phoneNumber, phoneNumber),
+      where: (users, { eq }) => eq(users.email, email),
     });
 
     if (existingUser) {
@@ -31,9 +33,10 @@ export async function createUser(
     const [newUser] = await db
       .insert(users)
       .values({
-        phoneNumber: phoneNumber,
+        email: email,
         firstName: firstName,
         lastName: lastName,
+        clerkId: clerkId,
       })
       .returning();
 

@@ -34,8 +34,8 @@ export const complaints = pgTable("complaints", {
     .references(() => categories.id, { onDelete: "cascade" })
     .notNull(),
   location: text("location").notNull(),
-  userId: uuid("userId")
-    .references(() => users.userId, {
+  clerkId: varchar("clerkId")
+    .references(() => users.clerkId, {
       onDelete: "cascade",
     })
     .notNull(),
@@ -49,8 +49,9 @@ export const users = pgTable("users", {
   userId: uuid("userId").primaryKey().notNull().defaultRandom(),
   firstName: varchar("firstName", { length: 50 }),
   lastName: varchar("lastName", { length: 50 }),
-  phoneNumber: text("phoneNumber").notNull(),
-  email: varchar("email", { length: 255 }).unique(),
+  phoneNumber: text("phoneNumber").unique(),
+  email: varchar("email", { length: 255 }).unique().notNull(),
+  clerkId: varchar("clerkId").unique().notNull(),
   role: userRole("role").default("citizen").notNull(),
   departmentId: uuid("departmentId").references(() => departments.id),
   createdAt,
@@ -95,8 +96,8 @@ export const userRelations = relations(users, ({ many, one }) => ({
 
 export const complaintsRelations = relations(complaints, ({ one }) => ({
   user: one(users, {
-    fields: [complaints.userId],
-    references: [users.userId],
+    fields: [complaints.clerkId],
+    references: [users.clerkId],
   }),
   category: one(categories, {
     fields: [complaints.categoryId],

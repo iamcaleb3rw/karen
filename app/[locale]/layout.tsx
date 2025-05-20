@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import "./globals.css";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { Toaster } from "sonner";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -29,11 +30,13 @@ export default async function RootLayout({
     notFound();
   }
   return (
-    <html lang={locale}>
-      <body className={`${dmSans.className}`}>
-        <Toaster richColors />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang={locale}>
+        <body className={`${dmSans.className}`}>
+          <Toaster richColors />
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

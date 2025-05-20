@@ -9,8 +9,8 @@ export async function createComplaint(
   imageUrl: string,
   departmentId: string,
   categoryId: string,
-  location: string, // Fixed typo from 'loaction'
-  userId: string
+  location: string,
+  clerkId: string
 ) {
   try {
     const received = {
@@ -20,14 +20,14 @@ export async function createComplaint(
       departmentId,
       categoryId,
       location,
-      userId,
+      clerkId,
     };
     console.log(received);
     // Insert new complaint with returning
     const [newComplaint] = await db
       .insert(complaints)
       .values({
-        userId: userId,
+        clerkId: clerkId,
         name: name,
         description: description,
         imageUrl: imageUrl,

@@ -14,7 +14,7 @@ import { z } from "zod";
 const formSchema = z.object({
   firstName: z.string().min(2),
   lastName: z.string().min(2),
-  phoneNumber: z.string().min(10),
+  email: z.string().min(10),
   description: z.string().min(10),
   location: z.string().min(2),
   receiveNotifications: z.boolean(),

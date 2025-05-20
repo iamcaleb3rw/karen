@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,10 +12,11 @@ import {
   CheckCircle2,
   ArrowRight,
   ArrowLeft,
-  Phone,
+  Mail,
   FileText,
   Bell,
-  Loader2, // Import Loader2 for the dialog
+  Loader2,
+  AlertTriangle, // Import AlertTriangle for error icon
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ComplaintDetailsStep } from "./ComplaintDetail";
@@ -25,13 +26,15 @@ import { PersonalInfoStep } from "./Personalinfo";
 import { createUser } from "@/actions/createUser";
 import { createComplaint } from "@/actions/createComplaint";
 import { useRouter } from "next/navigation";
+import { useAuth, useSignUp, useUser } from "@clerk/nextjs";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"; // Assuming shadcn/ui Dialog
+} from "@/components/ui/dialog";
+import { getUserInfo } from "@/actions/getUserinfo";
 
 const formSchema = z.object({
   firstName: z
@@ -40,9 +43,7 @@ const formSchema = z.object({
   lastName: z
     .string()
     .min(2, { message: "Last name must be at least 2 characters." }),
-  phoneNumber: z
-    .string()
-    .min(10, { message: "Please enter a valid phone number." }),
+  email: z.string().min(10, { message: "Please enter a email address." }),
   description: z
     .string()
     .min(10, { message: "Description must be at least 10 characters." }),
@@ -59,11 +60,13 @@ type Step = {
   title: string;
   icon: React.ReactNode;
 };
+
 interface ComplaintFormProps {
   title: string;
   departmentId: string;
   categoryId: string;
 }
+
 export default function ComplaintForm({
   title,
   departmentId,
@@ -72,25 +75,24 @@ export default function ComplaintForm({
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [photo, setPhoto] = useState<string | null | any>(null);
-  // const [docId, setDocId] = useState(""); // docId can be obtained from the submission response
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  // Let's use separate states for sending and verifying OTP for clarity
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isSendingOTP, setIsSendingOTP] = useState(false);
+  const { isLoaded, signUp, setActive } = useSignUp();
   const [isVerifyingOTP, setIsVerifyingOTP] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  const [uid, setUid] = useState(""); // User ID after phone verification
+  const [uid, setUid] = useState("");
+  const { isSignedIn, isLoaded: authLoaded, userId } = useAuth();
+  const { isLoaded: userLoaded, user } = useUser();
 
-  // New state for the redirecting dialog
   const [showRedirectDialog, setShowRedirectDialog] = useState(false);
-  // New state for the submission loading indicator (optional, dialog covers this)
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const steps: Step[] = [
     {
       id: 1,
       title: "Personal Information",
-      icon: <Phone className="h-5 w-5" />,
+      icon: <Mail className="h-5 w-5" />,
     },
     {
       id: 2,
@@ -110,7 +112,7 @@ export default function ComplaintForm({
     defaultValues: {
       firstName: "",
       lastName: "",
-      phoneNumber: "",
+      email: "",
       description: "",
       location: "",
       receiveNotifications: false,
@@ -118,39 +120,102 @@ export default function ComplaintForm({
     mode: "onChange",
   });
 
-  const { trigger, getValues, reset } = form; // Get reset from form hook
+  const { trigger, getValues, reset, setValue } = form;
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (authLoaded && userLoaded && isSignedIn && userId) {
+        // Set email/phone from Clerk
+        const primaryEmail = user?.emailAddresses.find(
+          (email) => email.id === user?.primaryEmailAddressId
+        );
+        if (primaryEmail) {
+          setValue("email", primaryEmail.emailAddress);
+        }
+        const primaryPhoneNumber = user?.phoneNumbers.find(
+          (phone) => phone.id === user?.primaryPhoneNumberId
+        );
+        if (primaryPhoneNumber) {
+          setValue("email", primaryPhoneNumber.phoneNumber); // Assuming email field is for phone
+        }
 
+        // Fetch first and last names from your database
+        try {
+          const userInfo = await getUserInfo(userId);
+          if (userInfo) {
+            setValue("firstName", userInfo.firstName || "");
+            setValue("lastName", userInfo.lastName || "");
+            setUid(userId);
+            setIsEmailVerified(true);
+          } else {
+            console.warn(
+              "User info not found in database for Clerk ID:",
+              userId
+            );
+            setUid(userId);
+            setIsEmailVerified(true);
+          }
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+          // Handle error fetching user info
+          toast.error("Failed to load user information.");
+          // You might want to handle this case by keeping fields editable
+          // or showing an error message.
+          setUid(userId); // Still use clerkUserId as a fallback UID on error
+          setIsEmailVerified(true); // Still assume verified via Clerk
+        }
+      } else if (authLoaded && userLoaded && !isSignedIn) {
+        // Reset form for signed-out users
+        reset({
+          firstName: "",
+          lastName: "",
+          email: "",
+          description: "",
+          location: "",
+          receiveNotifications: false,
+        });
+        setIsEmailVerified(false);
+        setUid("");
+      }
+    };
+
+    fetchUserInfo();
+
+    // Add dependencies: authLoaded, userLoaded, isSignedIn, clerkUserId, user, setValue
+  }, [authLoaded, userLoaded, isSignedIn, userId, user, setValue, reset]);
   const nextStep = async () => {
     let fieldsToValidate: (keyof FormValues)[] = [];
 
     switch (currentStep) {
       case 1:
-        fieldsToValidate = ["firstName", "lastName", "phoneNumber"];
-        // Validate fields for step 1
+        fieldsToValidate = ["firstName", "lastName", "email"];
         const step1Valid = await trigger(fieldsToValidate);
         if (step1Valid) {
-          // Check phone verification after field validation
-          if (!isPhoneVerified) {
-            toast.error("Please verify your phone number before proceeding");
-            return; // Stop if not verified
+          if (!isEmailVerified) {
+            toast.error(
+              "Please verify your Email address number before proceeding"
+            );
+            return;
           }
           setCurrentStep((prev) => Math.min(prev + 1, steps.length));
+        } else {
+          toast.error("Please fill in all required fields for Personal Info.");
         }
         break;
       case 2:
         fieldsToValidate = ["description", "location"];
-        // Validate fields for step 2
         const step2Valid = await trigger(fieldsToValidate);
         if (step2Valid) {
           setCurrentStep((prev) => Math.min(prev + 1, steps.length));
+        } else {
+          toast.error(
+            "Please fill in all required fields for Complaint Details."
+          );
         }
         break;
       case 3:
-        // No specific field validation needed for preferences step
         setCurrentStep((prev) => Math.min(prev + 1, steps.length));
         break;
       default:
-        // For review or any other step without specific validation
         setCurrentStep((prev) => Math.min(prev + 1, steps.length));
         break;
     }
@@ -161,16 +226,14 @@ export default function ComplaintForm({
   };
 
   async function onSubmit(values: FormValues) {
-    // Check if UID is available before submitting
     if (!uid) {
-      toast.error("Please complete phone verification before submitting.");
-      // You might want to navigate back to step 1 or highlight the issue
+      toast.error("Please complete email verification before submitting.");
       setCurrentStep(1);
       return;
     }
 
-    setIsSubmitting(true); // Set submitting state
-    setShowRedirectDialog(true); // Show the dialog
+    setIsSubmitting(true);
+    setShowRedirectDialog(true);
 
     try {
       const response = await createComplaint(
@@ -180,99 +243,112 @@ export default function ComplaintForm({
         departmentId,
         categoryId,
         values.location,
-        uid // Use the obtained uid
+        uid
       );
 
-      // No success toast here, the dialog covers the immediate feedback
-
-      // Introduce a small delay before redirecting
       setTimeout(() => {
         router.push(`/success/${response.id}`);
-      }, 1000); // 1000 milliseconds = 1 second delay
+      }, 1000);
     } catch (error: any) {
       console.error("Submission error:", error);
-      setShowRedirectDialog(false); // Hide dialog on error
-      toast.error(`Submission failed: ${error.message || error}`);
-      setIsSubmitting(false); // Reset submitting state on error
+      setShowRedirectDialog(false);
+      toast.error(`Submission failed: ${error.message || "Unknown error"}`);
+      setIsSubmitting(false);
     }
-    // The finally block is not strictly necessary here if the dialog is hidden on error
-    // and the redirect happens on success.
-    // The dialog will close automatically when the route changes on successful redirect.
   }
 
-  const sendOTP = async () => {
-    const phoneNumber = getValues("phoneNumber");
+  const sendOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isLoaded) return;
+    const email = getValues("email");
+    const isEmailValid = await trigger("email");
 
-    // Validate phone number before sending OTP
-    const isPhoneNumberValid = await trigger("phoneNumber");
-    if (!isPhoneNumberValid) {
-      toast.error("Please enter a valid phone number");
+    if (!isEmailValid) {
+      toast.error("Please enter a valid email address");
       return;
     }
 
-    setIsSendingOTP(true); // Set sending OTP state
+    setIsSendingOTP(true);
     toast.info("Sending verification code...", {
-      description: `A verification code will be sent to ${phoneNumber}`,
+      description: `A verification code will be sent to ${email}`,
     });
 
     try {
-      // *** Replace with your actual API call to send OTP ***
-      // Example using axios:
-      // const response = await axios.post('/api/send-otp', { phoneNumber });
-      await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate network delay
-
-      toast.success("Verification code sent", {
-        description: "Please enter the code to verify your phone number",
+      await signUp.create({
+        emailAddress: email,
       });
-    } catch (error) {
+
+      await signUp.prepareEmailAddressVerification({
+        strategy: "email_code",
+      });
+      toast.success("Verification code sent", {
+        description: "Please enter the code to verify email address",
+      });
+    } catch (error: any) {
       console.error("Error sending OTP:", error);
-      toast.error("Failed to send verification code. Please try again.");
+      toast.error(
+        `Failed to send verification code: ${
+          error.errors?.[0]?.message || error.message || "Unknown error"
+        }`
+      );
     } finally {
-      setIsSendingOTP(false); // Reset sending OTP state
+      setIsSendingOTP(false);
     }
   };
 
-  const verifyOTPandCreateUser = async () => {
+  const verifyOTPandCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isLoaded) return;
+    setIsVerifyingOTP(true);
+    toast.info("Verifying code...");
     if (otpCode.length < 6) {
       toast.error("Please enter a valid verification code");
+      setIsVerifyingOTP(false);
       return;
     }
 
-    setIsVerifyingOTP(true); // Set verifying OTP state
-    toast.info("Verifying code...");
-
     try {
-      const phoneNumber = getValues("phoneNumber");
+      const email = getValues("email");
       const firstName = getValues("firstName");
       const lastName = getValues("lastName");
 
-      // *** Replace with your actual API call to verify OTP and create user ***
-      // Example:
-      // const verificationResponse = await verifyOTPAction(phoneNumber, otpCode);
-      // const user = await createUser(phoneNumber, firstName, lastName);
+      const signUpAttempt = await signUp?.attemptEmailAddressVerification({
+        code: otpCode,
+      });
 
-      // Simulate user creation after successful verification
-      const user = await createUser(phoneNumber, firstName, lastName); // Assuming createUser action handles user creation
-      console.log("USER", user); // Log the created user or its ID
-      setUid(user.id); // Set the obtained UID
-      setIsPhoneVerified(true); // Mark as verified
-      toast.success("Phone number verified successfully");
-      setOtpCode(""); // Clear OTP input
+      if (signUpAttempt.status === "complete") {
+        await setActive({ session: signUpAttempt.createdSessionId });
+        const clerkId = signUp.createdUserId;
+        const user = await createUser(email, firstName, lastName, clerkId);
+        console.log("Created User:", user);
+        setUid(user.id); // Set the obtained UID
+
+        setIsEmailVerified(true);
+        toast.success("Email verified successfully");
+        setOtpCode(""); // Clear OTP input
+      } else {
+        console.error(
+          "Verification failed:",
+          JSON.stringify(signUpAttempt, null, 2)
+        );
+        toast.error(`Verification failed: Invalid code`);
+      }
     } catch (error: any) {
       console.error("Verification error:", error);
-      toast.error(`Failed to verify phone number: ${error.message || error}`);
+      toast.error(`Failed to verify email : ${JSON.stringify(error, null, 2)}`);
     } finally {
-      setIsVerifyingOTP(false); // Reset verifying OTP state
+      setIsVerifyingOTP(false);
     }
   };
 
   const handlePhotoChange = async (file: File | null) => {
     if (!file) {
-      setPhoto(null); // Clear photo if selection is canceled or invalid
+      setPhoto(null);
+      toast.info("File selection cancelled.");
       return;
     }
 
-    // Basic file type validation (optional but recommended)
     const acceptedTypes = [
       "image/jpeg",
       "image/png",
@@ -286,8 +362,7 @@ export default function ComplaintForm({
       return;
     }
 
-    // Basic file size validation (optional but recommended)
-    const maxFileSizeMB = 5; // Example: 5MB
+    const maxFileSizeMB = 5;
     if (file.size > maxFileSizeMB * 1024 * 1024) {
       toast.error(`File size exceeds the maximum limit of ${maxFileSizeMB}MB.`);
       return;
@@ -300,27 +375,32 @@ export default function ComplaintForm({
 
       const response = await axios.post("/api/files", formData);
       if (response.status === 200 && response.data) {
-        // Check for response.data
         console.log("Upload successful:", response.data);
-        // Assuming response.data contains the URL or identifier of the uploaded file
         setPhoto(response.data);
         toast.success("File uploaded successfully");
       } else {
         console.error("Image Upload Failed - Response:", response);
         toast.error("Image upload failed. Please try again.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Upload error:", error);
-      toast.error("Failed to upload file");
+      toast.error(`Failed to upload file: ${error.message || "Unknown error"}`);
     } finally {
       setIsUploading(false);
     }
   };
 
-  const removePhoto = () => setPhoto(null);
+  const removePhoto = () => {
+    setPhoto(null);
+    toast.info("Photo removed.");
+  };
+
+  const isButtonDisabled =
+    isSubmitting || isSendingOTP || isVerifyingOTP || isUploading;
 
   return (
     <div className="w-full max-w-6xl mx-auto">
+      <div id="clerk-captcha" />
       <div className="flex flex-col mt-2 lg:flex-row gap-8">
         <div className="flex-1 bg-white rounded-lg shadow-sm p-6 lg:p-8">
           <div className="mb-8">
@@ -389,11 +469,12 @@ export default function ComplaintForm({
               {currentStep === 1 && (
                 <PersonalInfoStep
                   form={form}
-                  isPhoneVerified={isPhoneVerified}
-                  isVerifying={isSendingOTP || isVerifyingOTP} // Pass combined loading state
+                  isEmailVerified={isEmailVerified}
+                  isVerifying={isSendingOTP || isVerifyingOTP}
                   otpCode={otpCode}
                   setOtpCode={setOtpCode}
                   sendOTP={sendOTP}
+                  isSignedIn={isSignedIn}
                   verifyOTP={verifyOTPandCreateUser}
                 />
               )}
@@ -414,7 +495,7 @@ export default function ComplaintForm({
                 <ReviewStep
                   form={form}
                   photo={photo}
-                  isPhoneVerified={isPhoneVerified}
+                  isEmailVerified={isEmailVerified}
                 />
               )}
             </form>
@@ -426,9 +507,7 @@ export default function ComplaintForm({
                 type="button"
                 variant="outline"
                 onClick={prevStep}
-                disabled={
-                  isSubmitting || isSendingOTP || isVerifyingOTP || isUploading
-                } // Disable during any process
+                disabled={isButtonDisabled}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" /> Previous
               </Button>
@@ -438,10 +517,10 @@ export default function ComplaintForm({
               <Button
                 type="button"
                 onClick={form.handleSubmit(onSubmit)}
-                disabled={isSubmitting || !isPhoneVerified} // Disable submit if submitting or phone not verified
+                disabled={isButtonDisabled || !isEmailVerified}
               >
                 {isSubmitting && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> // Show loader
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 Submit Complaint
               </Button>
@@ -449,9 +528,7 @@ export default function ComplaintForm({
               <Button
                 type="button"
                 onClick={nextStep}
-                disabled={
-                  isSubmitting || isSendingOTP || isVerifyingOTP || isUploading
-                } // Disable next during any process
+                disabled={isButtonDisabled}
               >
                 Next <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -470,7 +547,7 @@ export default function ComplaintForm({
               </h3>
               <p className="text-sm text-gray-600">
                 {currentStep === 1 &&
-                  "Provide your contact information and verify your phone number."}
+                  "Provide your contact information and verify your emil number."}
                 {currentStep === 2 &&
                   "Describe your complaint and provide relevant details."}
                 {currentStep === 3 && "Choose how you want to receive updates."}
@@ -508,7 +585,6 @@ export default function ComplaintForm({
         </div>
       </div>
 
-      {/* The Redirecting Dialog */}
       <Dialog open={showRedirectDialog} onOpenChange={setShowRedirectDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

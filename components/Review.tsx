@@ -5,10 +5,10 @@ import { CheckCircle2 } from "lucide-react";
 interface ReviewStepProps {
   form: UseFormReturn<FormValues>;
   photo: string | null;
-  isPhoneVerified: boolean;
+  isEmailVerified: boolean;
 }
 
-export function ReviewStep({ form, photo, isPhoneVerified }: ReviewStepProps) {
+export function ReviewStep({ form, photo, isEmailVerified }: ReviewStepProps) {
   const formValues = form.getValues();
 
   return (
@@ -27,11 +27,11 @@ export function ReviewStep({ form, photo, isPhoneVerified }: ReviewStepProps) {
             <strong>Name:</strong> {formValues.firstName} {formValues.lastName}
           </p>
           <p className="text-sm text-gray-700">
-            <strong>Phone:</strong> {formValues.phoneNumber}
+            <strong>Email address:</strong> {formValues.email}
           </p>
           <p className="text-sm text-gray-700">
             <strong>Verification Status:</strong>{" "}
-            {isPhoneVerified ? (
+            {isEmailVerified ? (
               <span className="text-green-600 inline-flex items-center">
                 <CheckCircle2 className="h-4 w-4 mr-1" /> Verified
               </span>

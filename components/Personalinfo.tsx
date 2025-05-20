@@ -16,7 +16,7 @@ import { CheckCircle, Loader2 } from "lucide-react";
 const formSchema = z.object({
   firstName: z.string().min(2),
   lastName: z.string().min(2),
-  phoneNumber: z.string().min(10),
+  email: z.string().min(10),
   description: z.string().min(10),
   location: z.string().min(2),
   receiveNotifications: z.boolean(),
@@ -26,22 +26,24 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface PersonalInfoStepProps {
   form: UseFormReturn<FormValues>;
-  isPhoneVerified: boolean;
+  isEmailVerified: boolean;
   isVerifying: boolean;
   otpCode: string;
+  isSignedIn: boolean | undefined;
   setOtpCode: (code: string) => void;
-  sendOTP: () => void;
-  verifyOTP: () => void;
+  sendOTP: (e: React.FormEvent) => void;
+  verifyOTP: (e: React.FormEvent) => void;
 }
 
 export function PersonalInfoStep({
   form,
-  isPhoneVerified,
+  isEmailVerified,
   isVerifying,
   otpCode,
   setOtpCode,
   sendOTP,
   verifyOTP,
+  isSignedIn,
 }: PersonalInfoStepProps) {
   return (
     <div className="space-y-6">
@@ -50,8 +52,8 @@ export function PersonalInfoStep({
           Personal Information
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Please provide your contact information. We'll verify your phone
-          number for security.
+          Please provide your contact information. We'll verify your email
+          address for security.
         </p>
       </div>
 
@@ -63,7 +65,12 @@ export function PersonalInfoStep({
             <FormItem>
               <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input placeholder="John" {...field} className="h-11" />
+                <Input
+                  placeholder="John"
+                  {...field}
+                  className="h-11"
+                  disabled={isSignedIn}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,7 +83,12 @@ export function PersonalInfoStep({
             <FormItem>
               <FormLabel>Last Name</FormLabel>
               <FormControl>
-                <Input placeholder="Doe" {...field} className="h-11" />
+                <Input
+                  placeholder="Doe"
+                  {...field}
+                  className="h-11"
+                  disabled={isSignedIn}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -87,25 +99,25 @@ export function PersonalInfoStep({
       <div className="space-y-4">
         <FormField
           control={form.control}
-          name="phoneNumber"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone Number</FormLabel>
+              <FormLabel>Email address</FormLabel>
               <div className="flex space-x-2">
                 <FormControl>
                   <Input
-                    placeholder="(123) 456-7890"
+                    placeholder="example@gmail.com"
                     {...field}
                     className="h-11"
-                    disabled={isPhoneVerified}
+                    disabled={isEmailVerified}
                   />
                 </FormControl>
-                {!isPhoneVerified ? (
+                {!isEmailVerified ? (
                   <Button
                     type="button"
                     variant="outline"
                     onClick={sendOTP}
-                    disabled={isVerifying || field.value.length < 10}
+                    disabled={isVerifying}
                     className="whitespace-nowrap"
                   >
                     {isVerifying ? (
@@ -133,7 +145,7 @@ export function PersonalInfoStep({
           )}
         />
 
-        {!isPhoneVerified && (
+        {!isEmailVerified && (
           <div className="space-y-2">
             <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Verification Code
@@ -145,7 +157,7 @@ export function PersonalInfoStep({
                 onChange={(e) => setOtpCode(e.target.value)}
                 className="h-11"
                 maxLength={6}
-                disabled={isPhoneVerified}
+                disabled={isEmailVerified}
               />
               <Button
                 type="button"
@@ -164,7 +176,7 @@ export function PersonalInfoStep({
               </Button>
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              Enter the 6-digit code sent to your phone number
+              Enter the 6-digit code sent to your email
             </p>
           </div>
         )}

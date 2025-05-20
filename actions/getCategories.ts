@@ -28,7 +28,7 @@ export async function getAllCategoriesWithSubcategories(
         subcategories: true,
       },
     });
-    console.log("UNTRANSLATED DATA", result);
+
     // Get translations for the specified locale
     const messages = messagesByLocale[locale];
 
@@ -44,7 +44,6 @@ export async function getAllCategoriesWithSubcategories(
     }));
 
     console.log("✅ Successfully fetched translated categories.");
-    console.log("TRANSLATED RESULT", translatedResult);
     return translatedResult;
   } catch (e) {
     console.error("❌ Translation failed:", e);
