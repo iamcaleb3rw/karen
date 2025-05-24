@@ -16,6 +16,8 @@ export async function createUser(
       clerkId,
     });
 
+    console.log("Searching for existing user....");
+
     const existingUser = await db.query.users.findFirst({
       where: (users, { eq }) => eq(users.email, email),
     });
@@ -29,7 +31,8 @@ export async function createUser(
         lastName: existingUser.lastName,
       };
     }
-
+    console.log("New user not found...");
+    console.log("Creating new user....");
     const [newUser] = await db
       .insert(users)
       .values({
@@ -42,7 +45,7 @@ export async function createUser(
 
     console.log("New USER CREATED", newUser);
     return {
-      id: newUser.userId,
+      id: newUser.clerkId,
       phoneNumber: newUser.phoneNumber,
       firstName: newUser.firstName,
       lastName: newUser.lastName,

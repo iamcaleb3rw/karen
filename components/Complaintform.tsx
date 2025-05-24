@@ -26,7 +26,7 @@ import { PersonalInfoStep } from "./Personalinfo";
 import { createUser } from "@/actions/createUser";
 import { createComplaint } from "@/actions/createComplaint";
 import { useRouter } from "next/navigation";
-import { useAuth, useSignUp, useUser } from "@clerk/nextjs";
+import { useAuth, useSignIn, useSignUp, useUser } from "@clerk/nextjs";
 import {
   Dialog,
   DialogContent,
@@ -34,7 +34,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getUserInfo } from "@/actions/getUserinfo";
+import { getUserId, getUserInfo } from "@/actions/getUserinfo";
+import { checkIfExists } from "@/actions/checkIfUserExists";
 
 const formSchema = z.object({
   firstName: z
@@ -84,6 +85,11 @@ export default function ComplaintForm({
   const [uid, setUid] = useState("");
   const { isSignedIn, isLoaded: authLoaded, userId } = useAuth();
   const { isLoaded: userLoaded, user } = useUser();
+  const {
+    isLoaded: isSignInLoaded,
+    signIn,
+    setActive: signInSetActive,
+  } = useSignIn();
 
   const [showRedirectDialog, setShowRedirectDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -267,20 +273,39 @@ export default function ComplaintForm({
       toast.error("Please enter a valid email address");
       return;
     }
-
+    const doesUserExist = await checkIfExists(email);
+    console.log("USER EXISTS BOOL", doesUserExist);
     setIsSendingOTP(true);
     toast.info("Sending verification code...", {
       description: `A verification code will be sent to ${email}`,
     });
 
     try {
-      await signUp.create({
-        emailAddress: email,
-      });
+      if (!doesUserExist) {
+        await signUp.create({
+          emailAddress: email,
+        });
 
-      await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
-      });
+        await signUp.prepareEmailAddressVerification({
+          strategy: "email_code",
+        });
+      } else {
+        const signInAttempt = await signIn?.create({
+          identifier: email,
+          strategy: "email_code",
+        });
+        const emailFactor = signInAttempt?.supportedFirstFactors.find(
+          (f) => f.strategy === "email_code"
+        ) as { emailAddressId: string } | undefined;
+        if (!emailFactor) {
+          throw new Error("Email code strategy not available");
+        }
+        await signIn?.prepareFirstFactor({
+          strategy: "email_code",
+          emailAddressId: emailFactor.emailAddressId,
+        });
+      }
+
       toast.success("Verification code sent", {
         description: "Please enter the code to verify email address",
       });
@@ -312,27 +337,54 @@ export default function ComplaintForm({
       const email = getValues("email");
       const firstName = getValues("firstName");
       const lastName = getValues("lastName");
+      const doesUserExist = await checkIfExists(email);
 
-      const signUpAttempt = await signUp?.attemptEmailAddressVerification({
-        code: otpCode,
-      });
+      if (!doesUserExist) {
+        const signUpAttempt = await signUp?.attemptEmailAddressVerification({
+          code: otpCode,
+        });
 
-      if (signUpAttempt.status === "complete") {
-        await setActive({ session: signUpAttempt.createdSessionId });
-        const clerkId = signUp.createdUserId;
-        const user = await createUser(email, firstName, lastName, clerkId);
-        console.log("Created User:", user);
-        setUid(user.id); // Set the obtained UID
+        if (signUpAttempt.status === "complete") {
+          console.log("SIGN UP COMPLERE");
+          await setActive({ session: signUpAttempt.createdSessionId });
+          const clerkId = signUp.createdUserId;
+          const user = await createUser(email, firstName, lastName, clerkId);
+          console.log("Created User:", user);
+          setUid(user.id); // Set the obtained UID
 
-        setIsEmailVerified(true);
-        toast.success("Email verified successfully");
-        setOtpCode(""); // Clear OTP input
+          setIsEmailVerified(true);
+          toast.success("Email verified successfully");
+          setOtpCode(""); // Clear OTP input
+        } else {
+          console.error(
+            "Verification failed:",
+            JSON.stringify(signUpAttempt, null, 2)
+          );
+          toast.error(`Verification failed: Invalid code`);
+        }
       } else {
-        console.error(
-          "Verification failed:",
-          JSON.stringify(signUpAttempt, null, 2)
-        );
-        toast.error(`Verification failed: Invalid code`);
+        const signInAttempt = await signIn?.attemptFirstFactor({
+          strategy: "email_code",
+          code: otpCode,
+        });
+
+        if (signInAttempt?.status === "complete") {
+          const fetchedUserId = await getUserId(email);
+          console.log(fetchedUserId);
+          if (!signInSetActive) {
+            toast.error("Sign-in session initialization failed");
+            return;
+          }
+          await signInSetActive({ session: signInAttempt.createdSessionId });
+          setIsEmailVerified(true);
+          toast.success("Signed in successfully");
+        } else {
+          console.error(
+            "Verification failed:",
+            JSON.stringify(signInAttempt, null, 2)
+          );
+          toast.error(`Verification failed: Invalid code`);
+        }
       }
     } catch (error: any) {
       console.error("Verification error:", error);

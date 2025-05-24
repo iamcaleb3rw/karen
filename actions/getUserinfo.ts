@@ -20,3 +20,18 @@ export async function getUserInfo(clerkId: string) {
     console.log("FETCHING INFO FOR SIGNED IN USER FAILED", e);
   }
 }
+
+export async function getUserId(email: string) {
+  try {
+    const fetchedUserId = await db.query.users.findFirst({
+      where: eq(users.email, email),
+      columns: {
+        clerkId: true,
+      },
+    });
+    console.log("Fetched user id", fetchedUserId);
+  } catch (e) {
+    console.error(e);
+    console.log("FETCHING INFO FOR SIGNED IN USER FAILED", e);
+  }
+}
