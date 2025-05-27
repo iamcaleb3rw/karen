@@ -50,3 +50,32 @@ export async function createComplaint(
     throw new Error("Failed to create complaint");
   }
 }
+
+export async function getComplaints() {
+  try {
+    const complaints = await db.query.complaints.findMany({
+      columns: {
+        id: true,
+        status: true,
+        location: true,
+        name: true,
+      },
+      with: {
+        user: {
+          columns: {
+            email: true,
+          },
+        },
+      },
+    });
+
+    console.log(
+      "Fetched Complaints successfully There are #",
+      complaints.length
+    );
+    return complaints;
+  } catch (e) {
+    console.log("Failes to fetch complaints");
+    throw new Error("Failed to create complaint");
+  }
+}

@@ -1,17 +1,23 @@
-import { checkRole } from "@/utils/roles";
-import { redirect } from "next/navigation";
+import { AppSidebar } from "@/components/app-sidebar";
+import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 
-export default async function AdminDashboard() {
-  // Protect the page from users who are not admins
-  const isAdmin = await checkRole("admin");
-  if (!isAdmin) {
-    redirect("/");
-  }
+import { SectionCards } from "@/components/section-cards";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
+import data from "./data.json";
+
+export default function Page() {
   return (
-    <p>
-      This is the protected admin dashboard restricted to users with the `admin`
-      role.
-    </p>
+    <div className="flex flex-1 flex-col">
+      <div className="@container/main flex flex-1 flex-col gap-2">
+        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+          <SectionCards />
+          <div className="px-4 lg:px-6">
+            <ChartAreaInteractive />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
