@@ -7,8 +7,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { Component } from "@/components/etheral-shadow";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-// Zod schemas
 const EmailSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
 });
@@ -36,14 +38,8 @@ export default function SignUpPage() {
     if (!isLoaded) return;
 
     try {
-      // Step 1: Create sign up with identifier (email only)
-      await signUp.create({
-        emailAddress: data.email,
-      });
-
-      // Step 2: Send OTP code
+      await signUp.create({ emailAddress: data.email });
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-
       toast.success("Verification code sent to your email.");
       setVerifying(true);
     } catch (err: any) {
@@ -75,73 +71,95 @@ export default function SignUpPage() {
   };
 
   return (
-    <>
-      <div id="clerk-captcha" />
-      <div className="max-w-sm mx-auto mt-10 p-4 border rounded-xl shadow space-y-6">
-        {!verifying ? (
-          <>
-            <h1 className="text-xl font-bold text-center">Sign Up</h1>
-            <form
-              onSubmit={emailForm.handleSubmit(handleEmailSubmit)}
-              className="space-y-4"
-            >
+    <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
+      <div className="flex flex-col justify-center px-6">
+        <div className="max-w-sm w-full mx-auto space-y-6">
+          <div id="clerk-captcha" />
+          {!verifying ? (
+            <>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full px-3 py-2 border rounded"
-                  {...emailForm.register("email")}
-                />
-                {emailForm.formState.errors.email && (
-                  <p className="text-sm text-red-500">
-                    {emailForm.formState.errors.email.message}
-                  </p>
-                )}
+                <h1 className="text-2xl font-bold">Sign Up</h1>
+                <p className="text-muted-foreground">
+                  Let's get started - Create an account
+                </p>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
+              <hr />
+              <form
+                onSubmit={emailForm.handleSubmit(handleEmailSubmit)}
+                className="space-y-4"
               >
-                Continue
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <h1 className="text-xl font-bold text-center">Verify Code</h1>
-            <form
-              onSubmit={codeForm.handleSubmit(handleCodeSubmit)}
-              className="space-y-4"
-            >
-              <div>
-                <label htmlFor="code" className="block text-sm font-medium">
-                  OTP Code
-                </label>
-                <input
-                  type="text"
-                  id="code"
-                  className="w-full px-3 py-2 border rounded"
-                  {...codeForm.register("code")}
-                />
-                {codeForm.formState.errors.code && (
-                  <p className="text-sm text-red-500">
-                    {codeForm.formState.errors.code.message}
-                  </p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium">
+                    Email Address
+                  </label>
+                  <Input
+                    type="email"
+                    id="email"
+                    className="w-full px-3 py-2 border rounded"
+                    disabled={emailForm.formState.isSubmitting}
+                    {...emailForm.register("email")}
+                  />
+                  {emailForm.formState.errors.email && (
+                    <p className="text-sm text-red-500">
+                      {emailForm.formState.errors.email.message}
+                    </p>
+                  )}
+                </div>
+                <Button
+                  type="submit"
+                  disabled={emailForm.formState.isSubmitting}
+                  className="w-full cursor-pointer bg-gradient-to-r from-pink-400 to-indigo-500"
+                >
+                  {emailForm.formState.isSubmitting ? "Sending..." : "Continue"}
+                </Button>
+              </form>
+            </>
+          ) : (
+            <>
+              <h1 className="text-2xl font-bold text-center">Verify Code</h1>
+              <form
+                onSubmit={codeForm.handleSubmit(handleCodeSubmit)}
+                className="space-y-4"
               >
-                Verify
-              </button>
-            </form>
-          </>
-        )}
+                <div>
+                  <label htmlFor="code" className="block text-sm font-medium">
+                    OTP Code
+                  </label>
+                  <input
+                    type="text"
+                    id="code"
+                    className="w-full px-3 py-2 border rounded"
+                    disabled={codeForm.formState.isSubmitting}
+                    {...codeForm.register("code")}
+                  />
+                  {codeForm.formState.errors.code && (
+                    <p className="text-sm text-red-500">
+                      {codeForm.formState.errors.code.message}
+                    </p>
+                  )}
+                </div>
+                <Button
+                  type="submit"
+                  disabled={codeForm.formState.isSubmitting}
+                  className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
+                >
+                  {codeForm.formState.isSubmitting ? "Verifying..." : "Verify"}
+                </Button>
+              </form>
+            </>
+          )}
+        </div>
       </div>
-    </>
+
+      <div className="md:flex hidden w-full h-screen justify-center items-center py-2 pr-2">
+        <Component
+          color="#6366f1"
+          animation={{ scale: 100, speed: 90 }}
+          noise={{ opacity: 1, scale: 1.2 }}
+          sizing="fill"
+          className="rounded-md"
+        />
+      </div>
+    </div>
   );
 }

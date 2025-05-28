@@ -9,6 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import Image from "next/image";
+import squareLogo from "@/public/squarelogo.svg";
+import Link from "next/link";
 
 // Zod schemas for different steps
 const emailSchema = z.object({
@@ -103,11 +106,23 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Sign in</h1>
+    <div className="max-w-md w-full mx-auto p-4">
+      <div>
+        <Image src={squareLogo} alt="Logo Image" />
+      </div>
+      <div>
+        <h1 className="text-2xl font-bold mt-4">Sign in</h1>
+        <p className="text-base text-muted-foreground mb-2">
+          Welcome back - Sign in to Karen
+        </p>
+      </div>
+      <hr />
 
       {!otpSent ? (
-        <form onSubmit={handleEmailSubmit(handleSendOTP)} className="space-y-4">
+        <form
+          onSubmit={handleEmailSubmit(handleSendOTP)}
+          className="space-y-4 mt-4"
+        >
           <div>
             <label htmlFor="email" className="block mb-2">
               Email address
@@ -127,7 +142,7 @@ export default function SignInForm() {
           <Button
             type="submit"
             disabled={isEmailSubmitting}
-            className="w-full disabled:opacity-50"
+            className="w-full disabled:opacity-50 bg-gradient-to-r from-pink-500 to-indigo-500"
           >
             {isEmailSubmitting ? "Sending code..." : "Send Verification Code"}
           </Button>
@@ -165,6 +180,12 @@ export default function SignInForm() {
           </Button>
         </form>
       )}
+      <div className="text-sm flex gap-1 items-center justify-center mt-4">
+        <p>First time user?</p>
+        <Link href={"/sign-up"} className="font-semibold hover:underline">
+          Create an account instead
+        </Link>
+      </div>
     </div>
   );
 }

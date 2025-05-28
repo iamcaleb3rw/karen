@@ -38,10 +38,5 @@ export default authMiddleware({
 });
 
 export const config = {
-  matcher: [
-    // Match all paths except static files and internals
-    "/((?!_next|static|favicon.ico|images|fonts|locales).*)",
-    // Include API routes
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
