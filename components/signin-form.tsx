@@ -75,7 +75,7 @@ export default function SignInForm() {
       });
     } catch (err) {
       const stringError = JSON.stringify(err);
-      toast.error(stringError);s
+      toast.error(stringError);
     }
   };
 
