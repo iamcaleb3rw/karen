@@ -1,118 +1,118 @@
-// import { db } from "./drizzle/db";
-// import { categories, departments, subcategories } from "./drizzle/schema";
-// // const departmentData = [
-// //   {
-// //     name: "Ministry of Infrastructure (MININFRA)",
-// //     description:
-// //       "Oversees roads, public buildings, housing, and transport infrastructure.",
-// //   },
-// //   {
-// //     name: "Rwanda Utilities Regulatory Authority (RURA)",
-// //     description:
-// //       "Regulates utilities like water, electricity, transport, telecoms, and sanitation.",
-// //   },
-// //   {
-// //     name: "Water and Sanitation Corporation (WASAC)",
-// //     description:
-// //       "Handles water supply and drainage systems across the country.",
-// //   },
-// //   {
-// //     name: "Rwanda Energy Group (REG)",
-// //     description:
-// //       "Manages electricity generation, transmission, and distribution.",
-// //   },
-// //   {
-// //     name: "Rwanda National Police (RNP)",
-// //     description:
-// //       "Maintains law and order, handles crimes and community safety.",
-// //   },
-// //   {
-// //     name: "Ministry of Health (MINISANTE)",
-// //     description:
-// //       "Oversees health facilities, services, and public health programs.",
-// //   },
-// //   {
-// //     name: "Rwanda Environment Management Authority (REMA)",
-// //     description:
-// //       "Handles environmental protection and pollution-related issues.",
-// //   },
-// //   {
-// //     name: "Rwanda Housing Authority (RHA)",
-// //     description: "Responsible for urban development and housing regulations.",
-// //   },
-// //   {
-// //     name: "Ministry of Education (MINEDUC)",
-// //     description:
-// //       "Oversees public schools, quality of education, and academic services.",
-// //   },
-// //   {
-// //     name: "Rwanda Transport Development Agency (RTDA)",
-// //     description: "Develops and maintains transport infrastructure.",
-// //   },
-// //   {
-// //     name: "Office of the Ombudsman",
-// //     description:
-// //       "Handles corruption, abuse of office, and poor service delivery.",
-// //   },
-// //   {
-// //     name: "Ministry of Local Government (MINALOC)",
-// //     description:
-// //       "Coordinates local governance, social welfare, and community development.",
-// //   },
-// //   {
-// //     name: "Rwanda Revenue Authority (RRA)",
-// //     description: "Manages taxes, utility billing, and customs.",
-// //   },
-// //   {
-// //     name: "Ministry of Public Service and Labor (MIFOTRA)",
-// //     description:
-// //       "Manages employment, labor relations, and civil service issues.",
-// //   },
-// //   {
-// //     name: "Ministry of ICT and Innovation (MINICT)",
-// //     description:
-// //       "Oversees digital governance, online services, and digital literacy.",
-// //   },
-// //   {
-// //     name: "Rwanda Development Board (RDB)",
-// //     description:
-// //       "Handles business licensing, permits, and investment services.",
-// //   },
-// //   {
-// //     name: "Rwanda Consumer Protection Authority",
-// //     description: "Handles consumer rights and complaints.",
-// //   },
-// //   {
-// //     name: "National Council of Persons with Disabilities (NCPD)",
-// //     description:
-// //       "Addresses welfare and inclusion for persons with disabilities.",
-// //   },
-// //   {
-// //     name: "Local Sector Offices (Umurenge)",
-// //     description:
-// //       "Frontline units of government where many complaints are first received.",
-// //   },
-// //   {
-// //     name: "General Complaints",
-// //     description: "Covers uncategorized complaints or unresolved issues.",
-// //   },
-// // ];
+import { db } from "./drizzle/db";
+import { categories, departments, subcategories } from "./drizzle/schema";
+const departmentData = [
+  {
+    name: "Ministry of Infrastructure (MININFRA)",
+    description:
+      "Oversees roads, public buildings, housing, and transport infrastructure.",
+  },
+  {
+    name: "Rwanda Utilities Regulatory Authority (RURA)",
+    description:
+      "Regulates utilities like water, electricity, transport, telecoms, and sanitation.",
+  },
+  {
+    name: "Water and Sanitation Corporation (WASAC)",
+    description:
+      "Handles water supply and drainage systems across the country.",
+  },
+  {
+    name: "Rwanda Energy Group (REG)",
+    description:
+      "Manages electricity generation, transmission, and distribution.",
+  },
+  {
+    name: "Rwanda National Police (RNP)",
+    description:
+      "Maintains law and order, handles crimes and community safety.",
+  },
+  {
+    name: "Ministry of Health (MINISANTE)",
+    description:
+      "Oversees health facilities, services, and public health programs.",
+  },
+  {
+    name: "Rwanda Environment Management Authority (REMA)",
+    description:
+      "Handles environmental protection and pollution-related issues.",
+  },
+  {
+    name: "Rwanda Housing Authority (RHA)",
+    description: "Responsible for urban development and housing regulations.",
+  },
+  {
+    name: "Ministry of Education (MINEDUC)",
+    description:
+      "Oversees public schools, quality of education, and academic services.",
+  },
+  {
+    name: "Rwanda Transport Development Agency (RTDA)",
+    description: "Develops and maintains transport infrastructure.",
+  },
+  {
+    name: "Office of the Ombudsman",
+    description:
+      "Handles corruption, abuse of office, and poor service delivery.",
+  },
+  {
+    name: "Ministry of Local Government (MINALOC)",
+    description:
+      "Coordinates local governance, social welfare, and community development.",
+  },
+  {
+    name: "Rwanda Revenue Authority (RRA)",
+    description: "Manages taxes, utility billing, and customs.",
+  },
+  {
+    name: "Ministry of Public Service and Labor (MIFOTRA)",
+    description:
+      "Manages employment, labor relations, and civil service issues.",
+  },
+  {
+    name: "Ministry of ICT and Innovation (MINICT)",
+    description:
+      "Oversees digital governance, online services, and digital literacy.",
+  },
+  {
+    name: "Rwanda Development Board (RDB)",
+    description:
+      "Handles business licensing, permits, and investment services.",
+  },
+  {
+    name: "Rwanda Consumer Protection Authority",
+    description: "Handles consumer rights and complaints.",
+  },
+  {
+    name: "National Council of Persons with Disabilities (NCPD)",
+    description:
+      "Addresses welfare and inclusion for persons with disabilities.",
+  },
+  {
+    name: "Local Sector Offices (Umurenge)",
+    description:
+      "Frontline units of government where many complaints are first received.",
+  },
+  {
+    name: "General Complaints",
+    description: "Covers uncategorized complaints or unresolved issues.",
+  },
+];
 
-// // async function seedDepartments() {
-// //   try {
-// //     for (const dept of departmentData) {
-// //       await db.insert(departments).values({
-// //         name: dept.name,
-// //         description: dept.description,
-// //       });
-// //     }
-// //     console.log("✅ Departments seeded successfully.");
-// //   } catch (err) {
-// //     console.error("❌ Failed to seed departments:", err);
-// //   }
-// // }
+async function seedDepartments() {
+  try {
+    for (const dept of departmentData) {
+      await db.insert(departments).values({
+        name: dept.name,
+        description: dept.description,
+      });
+    }
+    console.log("✅ Departments seeded successfully.");
+  } catch (err) {
+    console.error("❌ Failed to seed departments:", err);
+  }
+}
 
-// // seedDepartments();
+// seedDepartments();
 
 // const subcategoryData = [
 //   // Public Infrastructure
@@ -350,20 +350,20 @@
 //   },
 // ];
 
-// // async function seedSubCategories() {
-// //   try {
-// //     await db.delete(subcategories);
-// //     console.log("✅ DB CLEARED");
-// //     for (const sub of subcategoryData) {
-// //       await db.insert(subcategories).values({
-// //         name: sub.name,
-// //         categoryId: sub.categoryId,
-// //       });
-// //     }
-// //     console.log("✅ Departments seeded successfully.");
-// //   } catch (err) {
-// //     console.error("❌ Failed to seed departments:", err);
-// //   }
-// // }
+// async function seedSubCategories() {
+//   try {
+//     await db.delete(subcategories);
+//     console.log("✅ DB CLEARED");
+//     for (const sub of subcategoryData) {
+//       await db.insert(subcategories).values({
+//         name: sub.name,
+//         categoryId: sub.categoryId,
+//       });
+//     }
+//     console.log("✅ Departments seeded successfully.");
+//   } catch (err) {
+//     console.error("❌ Failed to seed departments:", err);
+//   }
+// }
 
-// // seedSubCategories();
+// seedSubCategories();

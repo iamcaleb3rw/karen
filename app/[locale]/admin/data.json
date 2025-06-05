@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Slow internet speed in building C",
+    "email": "john.doe@example.com",
+    "location": "Building C, Apartment 3B",
+    "status": "Open"
+  },
+  {
+    "id": 2,
+    "name": "Excessive noise from upstairs neighbor",
+    "email": "jane.smith@example.com",
+    "location": "Building A, Apartment 5A",
+    "status": "In Progress"
+  },
+  {
+    "id": 3,
+    "name": "Issue with monthly billing statement",
+    "email": "peter.jones@example.com",
+    "location": "Online Portal",
+    "status": "Resolved"
+  },
+  {
+    "id": 4,
+    "name": "Damage to shared laundry room equipment",
+    "email": "mary.white@example.com",
+    "location": "Building B, Laundry Room",
+    "status": "Closed"
+  },
+  {
+    "id": 5,
+    "name": "Pest control required in common area",
+    "email": "david.brown@example.com",
+    "location": "Building D, Lobby",
+    "status": "Open"
+  },
+  {
+    "id": 6,
+    "name": "Leaky faucet in kitchen",
+    "email": "sarah.green@example.com",
+    "location": "Building C, Apartment 2F",
+    "status": "In Progress"
+  },
+  {
+    "id": 7,
+    "name": "Heating system not working correctly",
+    "email": "michael.black@example.com",
+    "location": "Building A, Apartment 1C",
+    "status": "Open"
+  },
+  {
+    "id": 8,
+    "name": "Parking space occupied by unauthorized vehicle",
+    "email": "emily.blue@example.com",
+    "location": "Parking Lot, Space 42",
+    "status": "Resolved"
+  },
+  {
+    "id": 9,
+    "name": "Question about lease agreement terms",
+    "email": "chris.grey@example.com",
+    "location": "Email Inquiry",
+    "status": "Closed"
+  },
+  {
+    "id": 10,
+    "name": "Issue with gym equipment",
+    "email": "anna.red@example.com",
+    "location": "Community Gym",
+    "status": "In Progress"
+  }
+]

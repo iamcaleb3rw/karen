@@ -10,6 +10,11 @@ const intlMiddleware = createMiddleware({
 
 export default authMiddleware({
   beforeAuth: (req: any) => {
+    const pathname = req.nextUrl.pathname;
+
+    if (pathname.startsWith("/api")) {
+      return NextResponse.next(); // Bypass locale handling
+    }
     // Run internationalization first
     return intlMiddleware(req);
   },

@@ -36,6 +36,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import {
+  Bell,
   CheckCircle2Icon,
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -44,11 +45,14 @@ import {
   ChevronsRightIcon,
   ColumnsIcon,
   GripVerticalIcon,
+  Link2,
   LoaderIcon,
   MoreVerticalIcon,
-  PlusIcon,
-  X,
+  Trash2,
+  // PlusIcon, // Not used in this version
+  // X, // Not used in this version
 } from "lucide-react";
+import Link from "next/link";
 import { z } from "zod";
 
 import { Badge } from "@/components/ui/badge";
@@ -62,7 +66,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input"; // Not used in this version
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -210,7 +214,7 @@ const columns: ColumnDef<z.infer<typeof complaintSchema>>[] = [
   },
   {
     id: "actions",
-    cell: () => (
+    cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -222,11 +226,25 @@ const columns: ColumnDef<z.infer<typeof complaintSchema>>[] = [
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>View Complaint</DropdownMenuItem>
-          <DropdownMenuItem>Update Status</DropdownMenuItem>
+        <DropdownMenuContent align="end" className="w-40">
+          <DropdownMenuItem>
+            <Link
+              href={`/gov/complaints/${row.original.id}`}
+              className="flex gap-2 items-center"
+            >
+              <Link2 className="h-5 w-5" />
+              View Complaint
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Bell className="h-5 w-5" />
+            Update Status
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Delete</DropdownMenuItem>
+          <DropdownMenuItem className="text-red-500">
+            <Trash2 className="text-red-500" />
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),

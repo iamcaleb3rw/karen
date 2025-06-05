@@ -43,11 +43,24 @@ export const complaints = pgTable("complaints", {
   updatedAt,
 });
 
+export const responses = pgTable("responses", {
+  id: uuid("responseId").primaryKey().notNull().defaultRandom(),
+  complaintId: uuid("complaintId")
+    .references(() => complaints.id)
+    .notNull(),
+  message: text("message").notNull(),
+  responderClerkId: varchar("responderId")
+    .references(() => users.clerkId)
+    .notNull(),
+  createdAt,
+  updatedAt,
+});
+
 //KARENS TABLE
 export const userRole = pgEnum("userRole", ["citizen", "staff", "admin"]);
 export const users = pgTable("users", {
   userId: uuid("userId").primaryKey().notNull().defaultRandom(),
-  firstName: varchar("firstName", { length: 50 }),
+  firstName: varchar("firstName", { length: 50 }).notNull(),
   lastName: varchar("lastName", { length: 50 }),
   phoneNumber: text("phoneNumber").unique(),
   email: varchar("email", { length: 255 }).unique().notNull(),
@@ -88,13 +101,14 @@ export const departments = pgTable("departments", {
 //JOINS, RELATIONS
 export const userRelations = relations(users, ({ many, one }) => ({
   complaints: many(complaints),
+  responses: many(responses),
   department: one(departments, {
     fields: [users.departmentId],
     references: [departments.id],
   }),
 }));
 
-export const complaintsRelations = relations(complaints, ({ one }) => ({
+export const complaintsRelations = relations(complaints, ({ one, many }) => ({
   user: one(users, {
     fields: [complaints.clerkId],
     references: [users.clerkId],
@@ -102,6 +116,18 @@ export const complaintsRelations = relations(complaints, ({ one }) => ({
   category: one(categories, {
     fields: [complaints.categoryId],
     references: [categories.id],
+  }),
+  responses: many(responses),
+}));
+
+export const responsesRelations = relations(responses, ({ one }) => ({
+  complaint: one(complaints, {
+    fields: [responses.complaintId],
+    references: [complaints.id],
+  }),
+  responder: one(users, {
+    fields: [responses.responderClerkId],
+    references: [users.clerkId],
   }),
 }));
 

@@ -8,6 +8,8 @@ import {
   complaintsRelations,
   departmentRelations,
   departments,
+  responses,
+  responsesRelations,
   subcategories,
   subcategoriesRelations,
   userRelations,
@@ -29,5 +31,7 @@ export const db = drizzle(sql, {
     userRelations,
     complaintsRelations,
     subcategoriesRelations,
+    responsesRelations,
+    responses,
   },
 });

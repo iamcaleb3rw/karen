@@ -12,6 +12,7 @@ import {
   FileTextIcon,
   FolderIcon,
   HelpCircleIcon,
+  KeyRound,
   LayoutDashboardIcon,
   ListIcon,
   SearchIcon,
@@ -42,18 +43,23 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/gov",
+      url: "/admin",
       icon: LayoutDashboardIcon,
     },
     {
       title: "Complaints",
-      url: "/gov/complaints",
+      url: "/admin/complaints",
       icon: ListIcon,
     },
     {
       title: "Analytics",
-      url: "/gov/analytics",
+      url: "/admin/analytics",
       icon: BarChartIcon,
+    },
+    {
+      title: "Permissions",
+      url: "/admin/requests",
+      icon: KeyRound,
     },
   ],
 };
