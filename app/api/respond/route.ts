@@ -1,3 +1,4 @@
+import { getUserInfo } from "@/actions/getUserinfo";
 import { db } from "@/drizzle/db";
 import { responses } from "@/drizzle/schema";
 import { auth } from "@clerk/nextjs/server";
@@ -26,7 +27,18 @@ export async function POST(req: Request) {
         complaintId: responses.complaintId,
       });
 
-    return NextResponse.json(insertedRow);
+    const userInfo = await getUserInfo(insertedRow.responderClerkId);
+    const responseToReturn = {
+      id: insertedRow.id,
+      message: insertedRow.message,
+      createdAt: insertedRow.createdAt,
+      complaintId: insertedRow.complaintId,
+      responderClerkId: insertedRow.responderClerkId,
+      responderFirstName: userInfo?.firstName,
+      responderEmail: userInfo?.email,
+    };
+
+    return NextResponse.json(responseToReturn);
   } catch (e) {
     return new NextResponse("Internal Error", { status: 500 });
   }

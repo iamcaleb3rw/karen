@@ -1,6 +1,7 @@
 "use server";
 import { db } from "@/drizzle/db";
 import { complaints, responses } from "@/drizzle/schema";
+import { ComplaintStatus } from "@/types/complaint";
 import { desc, eq, sql } from "drizzle-orm";
 
 export async function getTotalComplaints() {
@@ -56,5 +57,24 @@ export async function getComplaintById(complaintId: string) {
   } catch (e) {
     console.error(e);
     console.log("Error fetching complaint", e);
+  }
+}
+
+export async function updateStatus(
+  complaintId: string,
+  status: ComplaintStatus
+) {
+  try {
+    const result = await db
+      .update(complaints)
+      .set({
+        status: status,
+      })
+      .where(eq(complaints.id, complaintId));
+    console.log(result);
+    return { success: true };
+  } catch (e) {
+    console.log("ERROR UPDATING STATUS", e);
+    console.error(e);
   }
 }

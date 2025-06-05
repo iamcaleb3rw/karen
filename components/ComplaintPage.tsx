@@ -23,6 +23,8 @@ import { Complaint, Response as ResponseType } from "@/types/complaint"; // Alia
 
 // Import the new ResponseHistory component
 import ResponseHistory from "@/components/ResponseHistory";
+import { DropdownMenu } from "./ui/dropdown-menu";
+import StatusUpdate from "./StatusUpdate";
 
 export default function ComplaintResponsePage({
   complaint: initialComplaint, // Rename prop to initialComplaint
@@ -49,8 +51,6 @@ export default function ComplaintResponsePage({
       complaintId: complaint.id,
       message: responseText,
       isFollowUp: hasExistingResponses,
-      // You'll likely need to send the responder's ID or session info from the client
-      // so your API knows who made the response. This example assumes your API handles it.
     };
 
     try {
@@ -65,8 +65,8 @@ export default function ComplaintResponsePage({
           createdAt: new Date(result.data.createdAt),
           // Convert string to Date object
           responder: {
-            firstName: result.data.responder?.firstName || "Unknown Responder",
-            email: result.data.responder?.email || "unknown@example.com",
+            firstName: result.data.responderFirstName || "Unknown Responder",
+            email: result.data.responderEmail || "unknown@example.com",
           },
         };
 
@@ -197,6 +197,10 @@ export default function ComplaintResponsePage({
                   required
                 />
               </div>
+              <StatusUpdate
+                complaintId={complaint.id}
+                currentStatus={complaint.status}
+              />
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="emailCopy"
