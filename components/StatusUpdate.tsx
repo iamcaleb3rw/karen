@@ -46,7 +46,7 @@ export const StatusUpdate: React.FC<StatusUpdateProps> = ({
     setSelectedStatus(newStatus);
 
     try {
-      toast.loading("Updating status...");
+      toast.info("Updating status...");
       const result = await updateStatus(complaintId, newStatus);
       toast.success("Status updated!");
       // Optionally: show a toast or notification of success

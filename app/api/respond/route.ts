@@ -1,14 +1,15 @@
 import { getUserInfo } from "@/actions/getUserinfo";
 import { db } from "@/drizzle/db";
 import { responses } from "@/drizzle/schema";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
+
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { complaintId, message } = await req.json();
-  console.log("RECEIVED data in API ROUTE", complaintId, message);
+  const { complaintId, message, userId } = await req.json();
+  console.log("RECEIVED data in API ROUTE", complaintId, message, userId);
+  console.log("FROM RESPOND API, userId:", userId);
   try {
-    const { userId } = await auth();
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(responseToReturn);
   } catch (e) {
+    console.log(e);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

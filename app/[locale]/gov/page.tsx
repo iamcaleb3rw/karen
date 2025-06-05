@@ -6,8 +6,18 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import data from "./data.json";
+import { checkRole } from "@/utils/roles";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+export default async function Page() {
+  const isAdmin = await checkRole("admin");
+  const isStaff = await checkRole("staff");
+  console.log("IS ADMIN", isAdmin);
+  console.log("IS STAFF", isStaff);
+
+  if (!isAdmin && !isStaff) {
+    return redirect("/");
+  }
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">

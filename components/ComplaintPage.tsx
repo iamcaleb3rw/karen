@@ -25,6 +25,7 @@ import { Complaint, Response as ResponseType } from "@/types/complaint"; // Alia
 import ResponseHistory from "@/components/ResponseHistory";
 import { DropdownMenu } from "./ui/dropdown-menu";
 import StatusUpdate from "./StatusUpdate";
+import { useAuth } from "@clerk/nextjs";
 
 export default function ComplaintResponsePage({
   complaint: initialComplaint, // Rename prop to initialComplaint
@@ -33,6 +34,7 @@ export default function ComplaintResponsePage({
 }) {
   // Use local state to manage the complaint data
   const [complaint, setComplaint] = useState<Complaint>(initialComplaint);
+  const { userId } = useAuth();
 
   const [responseText, setResponseText] = useState("");
   const [internalNotes, setInternalNotes] = useState("");
@@ -51,6 +53,7 @@ export default function ComplaintResponsePage({
       complaintId: complaint.id,
       message: responseText,
       isFollowUp: hasExistingResponses,
+      userId: userId,
     };
 
     try {
@@ -98,7 +101,6 @@ export default function ComplaintResponsePage({
 
   return (
     <div className="rounded-lg">
-      {/* Header */}
       <div className="border-t-0 border grid grid-cols-1 lg:grid-cols-2 sticky top-0 bg-white z-10">
         <p className="text-sm md:text-lg p-2 font-bold border-r">
           Complaint Response Portal
@@ -110,7 +112,6 @@ export default function ComplaintResponsePage({
           </p>
         </div>
       </div>
-
       {/* Main Content */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 items-start">
         {/* Complaint Details and History */}
